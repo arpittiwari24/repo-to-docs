@@ -1,6 +1,7 @@
 import GitHubProvider from "next-auth/providers/github";
 import { NextAuthOptions, User } from "next-auth";
-
+import { Adapter } from "next-auth/adapters";
+import { SupabaseAdapter } from "@auth/supabase-adapter";
 declare module "next-auth" {
   interface User {
     accessToken?: string;
@@ -33,6 +34,10 @@ const authOptions: NextAuthOptions = {
           },
         })
       ],
+  adapter: SupabaseAdapter({
+       url: process.env.SUPABASE_SECRET ?? "",
+       secret: process.env.SUPABASE_URL ?? "",
+     }) as Adapter,
     secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: "jwt"
