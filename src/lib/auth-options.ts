@@ -35,8 +35,8 @@ const authOptions: NextAuthOptions = {
         })
       ],
   adapter: SupabaseAdapter({
-       url: process.env.SUPABASE_SECRET ?? "",
-       secret: process.env.SUPABASE_URL ?? "",
+       url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+       secret: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY ?? "",
      }) as Adapter,
     secret: process.env.NEXTAUTH_SECRET,
     session: {
