@@ -1,9 +1,21 @@
-import Image from "next/image";
+import { getServerSession } from "next-auth";
+import authOptions from "@/lib/auth-options";
+import { redirect } from "next/navigation";
+import LoginButton from "@/components/LoginButton";
+import DocsGenerator from "@/components/DocsGenerator";
 
-export default function Home() {
-  return (
-    <div className="flex items-center justify-center py-20">
-      <button className=" border border-white text-white py-8 px-8">Sign in</button>
-    </div>
-  )
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  // If no session exists, show login page
+  if (!session) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900">
+        <h1 className="text-4xl font-bold mb-8 text-white max-sm:text-center">AI GitHub Readme Generator</h1>
+        <LoginButton />
+      </div>
+    );
+  }
+
+  return <DocsGenerator session={session} />;
 }
