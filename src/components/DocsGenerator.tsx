@@ -31,6 +31,49 @@ interface DocsGeneratorProps {
   session: Session;
 }
 
+const loadingQuotes = [
+  {
+    quote: "Documentation is a love letter that you write to your future self.",
+    author: "Damian Conway"
+  },
+  {
+    quote: "Code tells you how, comments tell you why.",
+    author: "Jeff Atwood"
+  },
+  {
+    quote: "Programs must be written for people to read, and only incidentally for machines to execute.",
+    author: "Harold Abelson"
+  },
+  {
+    quote: "Documentation is the castor oil of programming. Managers think it is good for programmers and programmers hate it!",
+    author: "Gerald Weinberg"
+  },
+  {
+    quote: "The only way to go fast is to go well.",
+    author: "Robert C. Martin"
+  },
+  {
+    quote: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+    author: "Martin Fowler"
+  },
+  {
+    quote: "Good documentation is like chocolate: you can never have too much of it.",
+    author: "Unknown"
+  },
+  {
+    quote: "Documentation is like sex: when it's good, it's very good; when it's bad, it's better than nothing.",
+    author: "Dick Brandon"
+  },
+  {
+    quote: "The value of good documentation is like having a good insurance policy.",
+    author: "Unknown"
+  },
+  {
+    quote: "Without requirements or design, programming is the art of adding bugs to an empty text file.",
+    author: "Louis Srygley"
+  }
+];
+
 export default function DocsGenerator({ session }: DocsGeneratorProps) {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
@@ -42,6 +85,35 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedReadme, setEditedReadme] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentQuote, setCurrentQuote] = useState(loadingQuotes[0]);
+
+  // Rotate through quotes while loading
+  useEffect(() => {
+    let quoteInterval: NodeJS.Timeout;
+    
+    if (isLoading) {
+      quoteInterval = setInterval(() => {
+        setCurrentQuote(prevQuote => {
+          const currentIndex = loadingQuotes.indexOf(prevQuote);
+          const nextIndex = (currentIndex + 1) % loadingQuotes.length;
+          return loadingQuotes[nextIndex];
+        });
+      }, 5000); // Change quote every 5 seconds
+    }
+
+    return () => {
+      if (quoteInterval) {
+        clearInterval(quoteInterval);
+      }
+    };
+  }, [isLoading]);
+
+  // Reset quote when loading starts
+  useEffect(() => {
+    if (isLoading) {
+      setCurrentQuote(loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)]);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (docs?.readme) {
@@ -230,8 +302,25 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
           </div>
         )}
 
+{isLoading && (
+          <div className="flex flex-col items-center justify-center space-y-6 my-12 px-4 py-8 bg-gray-800 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
+              <span className="text-lg">Generating documentation...</span>
+            </div>
+            <div className="max-w-2xl text-center">
+              <blockquote className="text-lg italic text-gray-300">
+                "{currentQuote.quote}"
+              </blockquote>
+              <cite className="block mt-2 text-sm text-gray-400">
+                — {currentQuote.author}
+              </cite>
+            </div>
+          </div>
+        )}
+
         {/* Repository Loading State */}
-        {isFetching && (
+        {isFetching && !isLoading && (
           <div className="flex items-center justify-center space-x-2 text-gray-400 my-8">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>Loading repositories...</span>
