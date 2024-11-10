@@ -161,7 +161,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
             <BookOpen className="w-8 h-8" />
-            <h1 className="text-2xl md:text-3xl font-bold">GitHub Docs Generator</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">GitHub Readme Generator</h1>
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-gray-300">Welcome, {session.user?.name}</span>
