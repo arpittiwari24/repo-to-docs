@@ -3,7 +3,19 @@
 import { useState, useEffect, SetStateAction } from "react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import { Loader2, BookOpen, LogOut, Copy, Check, Edit2, X, Save, ExternalLink } from "lucide-react";
+import { 
+  Loader2, 
+  BookOpen, 
+  LogOut, 
+  Copy, 
+  Check, 
+  Edit2, 
+  X, 
+  Save, 
+  ExternalLink, 
+  Search,
+  ChevronDown 
+} from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -61,14 +73,6 @@ const loadingQuotes = [
     author: "Unknown"
   },
   {
-    quote: "Documentation is like sex: when it's good, it's very good; when it's bad, it's better than nothing.",
-    author: "Dick Brandon"
-  },
-  {
-    quote: "The value of good documentation is like having a good insurance policy.",
-    author: "Unknown"
-  },
-  {
     quote: "Without requirements or design, programming is the art of adding bugs to an empty text file.",
     author: "Louis Srygley"
   }
@@ -86,8 +90,8 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
   const [editedReadme, setEditedReadme] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentQuote, setCurrentQuote] = useState(loadingQuotes[0]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // Rotate through quotes while loading
   useEffect(() => {
     let quoteInterval: NodeJS.Timeout;
     
@@ -98,7 +102,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
           const nextIndex = (currentIndex + 1) % loadingQuotes.length;
           return loadingQuotes[nextIndex];
         });
-      }, 5000); // Change quote every 5 seconds
+      }, 5000);
     }
 
     return () => {
@@ -108,7 +112,6 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
     };
   }, [isLoading]);
 
-  // Reset quote when loading starts
   useEffect(() => {
     if (isLoading) {
       setCurrentQuote(loadingQuotes[Math.floor(Math.random() * loadingQuotes.length)]);
@@ -139,7 +142,6 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
           }
           
           const data = await response.json();
-          // Sort repositories by update date
           const sortedRepos = data.sort((a: Repository, b: Repository) => 
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
           );
@@ -181,6 +183,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
 
       const data = await response.json();
       setDocs(data);
+      setIsSearchOpen(false);
     } catch (error) {
       setError('Failed to generate documentation. Please try again.');
       console.error('Error generating documentation:', error);
@@ -227,208 +230,256 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
   );
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 space-y-4 md:space-y-0">
-          <div className="flex items-center space-x-4">
-            <BookOpen className="w-8 h-8" />
-            <h1 className="text-2xl md:text-3xl font-bold">GitHub Readme Generator</h1>
+        <nav className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-800">
+          <div className="flex items-center gap-3">
+            <BookOpen className="w-8 h-8 text-blue-400" />
+            <h1 className="text-2xl sm:text-3xl font-bold">GitHub Readme Generator</h1>
           </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-300">Welcome, {session.user?.name}</span>
+          <div className="flex items-center gap-4">
+            <span className="text-sm sm:text-base text-gray-300">
+              Welcome, {session.user?.name}
+            </span>
             <button
               onClick={() => signOut()}
-              className="flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
             >
               <LogOut className="w-4 h-4" />
-              <span>Log out</span>
+              <span className="hidden sm:inline">Log out</span>
             </button>
           </div>
-        </div>
+        </nav>
 
-        {/* Repository Selection */}
-        <div className="mb-8">
-          <label className="block text-sm font-medium mb-2">
-            Select a Repository
-          </label>
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-            <div className="flex-grow">
-              {/* <input
-                type="text"
-                placeholder="Search repositories..."
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mb-2 focus:outline-none focus:border-blue-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              /> */}
-              <select
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2"
-                onChange={(e) => setSelectedRepo(e.target.value)}
-                value={selectedRepo ?? ''}
-                disabled={isFetching}
-              >
-                <option value="">Choose a repository</option>
-                {filteredRepos.map((repo) => (
-                  <option key={repo.id} value={repo.full_name}>
-                    {repo.full_name} {repo.private ? '(Private)' : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button
-              onClick={generateDocs}
-              disabled={!selectedRepo || isLoading}
-              className="flex items-center justify-center space-x-2 bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 min-w-[180px]"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Generating...</span>
-                </>
-              ) : (
-                <>
-                  <BookOpen className="w-4 h-4" />
-                  <span>Generate Docs</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-900/50 border border-red-700 rounded-lg p-4 mb-8 text-sm">
-            {error}
-          </div>
-        )}
-
-{isLoading && (
-          <div className="flex flex-col items-center justify-center space-y-6 my-12 px-4 py-8 bg-gray-800 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
-              <span className="text-lg">Generating documentation...</span>
-            </div>
-            <div className="max-w-2xl text-center">
-              <blockquote className="text-lg italic text-gray-300">
-                "{currentQuote.quote}"
-              </blockquote>
-              <cite className="block mt-2 text-sm text-gray-400">
-                — {currentQuote.author}
-              </cite>
-            </div>
-          </div>
-        )}
-
-        {/* Repository Loading State */}
-        {isFetching && !isLoading && (
-          <div className="flex items-center justify-center space-x-2 text-gray-400 my-8">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Loading repositories...</span>
-          </div>
-        )}
-
-        {/* Documentation Display */}
-        {docs && (
-          <div className="bg-gray-800 rounded-lg p-4 md:p-8">
-            <div className="mb-6">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 space-y-4 md:space-y-0">
-                <h2 className="text-xl md:text-2xl font-bold">{docs.repositoryName}</h2>
-                <div className="flex flex-wrap items-center gap-2">
-                  {!isEditing ? (
-                    <>
+        {/* Main Content */}
+        <main className="space-y-8">
+          {/* Repository Selection */}
+          <div className="relative">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-grow">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search repositories..."
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 pr-10 focus:outline-none focus:border-blue-500 transition-colors"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onFocus={() => setIsSearchOpen(true)}
+                  />
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                </div>
+                {isSearchOpen && filteredRepos.length > 0 && (
+                  <div className="absolute z-10 w-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+                    {filteredRepos.map((repo) => (
                       <button
-                        onClick={handleEdit}
-                        className="flex items-center space-x-2 bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+                        key={repo.id}
+                        className="w-full px-4 py-3 text-left hover:bg-gray-700 transition-colors flex items-center justify-between"
+                        onClick={() => {
+                          setSelectedRepo(repo.full_name);
+                          setIsSearchOpen(false);
+                        }}
                       >
-                        <Edit2 className="w-4 h-4" />
-                        <span>Edit</span>
-                      </button>
-                      <button
-                        onClick={handleCopy}
-                        className="flex items-center space-x-2 bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
-                      >
-                        {isCopied ? (
-                          <>
-                            <Check className="w-4 h-4 text-green-400" />
-                            <span>Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-4 h-4" />
-                            <span>Copy README</span>
-                          </>
+                        <span className="flex-1 truncate">{repo.full_name}</span>
+                        {repo.private && (
+                          <span className="ml-2 px-2 py-1 text-xs bg-gray-600 rounded-full">
+                            Private
+                          </span>
                         )}
                       </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={handleSave}
-                        className="flex items-center space-x-2 bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                      >
-                        <Save className="w-4 h-4" />
-                        <span>Save</span>
-                      </button>
-                      <button
-                        onClick={handleCancel}
-                        className="flex items-center space-x-2 bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
-                      >
-                        <X className="w-4 h-4" />
-                        <span>Cancel</span>
-                      </button>
-                    </>
-                  )}
-                  <a
-                    href={docs.repositoryUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-2 text-blue-400 hover:text-blue-300"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    <span>View on GitHub</span>
-                  </a>
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <p className="text-gray-400 text-sm">
-                Generated documentation based on {docs.fileCount} files
-              </p>
+              <button
+                onClick={generateDocs}
+                disabled={!selectedRepo || isLoading}
+                className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed min-w-[160px] sm:min-w-[180px]"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <BookOpen className="w-4 h-4" />
+                    <span>Generate Docs</span>
+                  </>
+                )}
+              </button>
             </div>
-            
-            <div className={`prose prose-invert max-w-none ${isEditing ? 'prose-sm' : ''}`}>
-              {isEditing ? (
-                <div className="relative">
-                  <TextareaAutosize
-                    value={editedReadme}
-                    onChange={(e: { target: { value: SetStateAction<string>; }; }) => setEditedReadme(e.target.value)}
-                    className="w-full bg-gray-900 text-white p-4 rounded-lg border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none min-h-[500px] font-mono text-sm"
-                    placeholder="Edit your README here..."
-                    minRows={20}
-                  />
-                  <div className="absolute top-2 right-2 flex space-x-2">
-                    <button
-                      onClick={handleCopy}
-                      className="flex items-center space-x-1 bg-gray-800 px-2 py-1 rounded text-sm hover:bg-gray-700"
+            {selectedRepo && (
+              <div className="mt-2 text-sm text-gray-400">
+                Selected: {selectedRepo}
+              </div>
+            )}
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="p-4 bg-red-900/50 border border-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Loading State with Quotes */}
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center gap-6 p-8 bg-gray-800 rounded-lg text-center">
+              <div className="flex items-center gap-3">
+                <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
+                <span className="text-lg">Generating documentation...</span>
+              </div>
+              <blockquote className="max-w-2xl">
+                <p className="text-lg italic text-gray-300">"{currentQuote.quote}"</p>
+                <footer className="mt-2 text-sm text-gray-400">
+                  — {currentQuote.author}
+                </footer>
+              </blockquote>
+            </div>
+          )}
+
+          {/* Documentation Display */}
+          {docs && (
+            <div className="bg-gray-800 rounded-lg overflow-hidden">
+              {/* Header */}
+              <div className="p-4 sm:p-6 border-b border-gray-700">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-bold">{docs.repositoryName}</h2>
+                    <p className="mt-1 text-sm text-gray-400">
+                      Generated from {docs.fileCount} files
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {!isEditing ? (
+                      <>
+                        <button
+                          onClick={handleEdit}
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          onClick={handleCopy}
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                        >
+                          {isCopied ? (
+                            <>
+                              <Check className="w-4 h-4 text-green-400" />
+                              <span>Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4" />
+                              <span>Copy</span>
+                            </>
+                          )}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={handleSave}
+                          className="flex items-center gap-2 px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 transition-colors text-sm"
+                        >
+                          <Save className="w-4 h-4" />
+                          <span>Save</span>
+                        </button>
+                        <button
+                          onClick={handleCancel}
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                        >
+                          <X className="w-4 h-4" />
+                          <span>Cancel</span>
+                        </button>
+                      </>
+                    )}
+                    <a
+                      href={docs.repositoryUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors text-sm"
                     >
-                      {isCopied ? (
-                        <>
-                          <Check className="w-3 h-3 text-green-400" />
-                          <span>Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3 h-3" />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
+                      <ExternalLink className="w-4 h-4" />
+                      <span>View on GitHub</span>
+                    </a>
                   </div>
                 </div>
-              ) : (
-                <ReactMarkdown>{docs.readme}</ReactMarkdown>
-              )}
+              </div>
+
+              {/* Content */}
+              <div className="p-4 sm:p-6">
+                <div className={`prose prose-invert max-w-none ${isEditing ? 'prose-sm' : ''}`}>
+                  {isEditing ? (
+                    <div className="relative">
+                      <TextareaAutosize
+                        value={editedReadme}
+                        onChange={(e: { target: { value: SetStateAction<string>; }; }) => setEditedReadme(e.target.value)}
+                        className="w-full bg-gray-900 text-white p-4 rounded-lg border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none min-h-[500px] font-mono text-sm leading-relaxed"
+                        placeholder="Edit your README here..."
+                        minRows={20}
+                      />
+                      <div className="absolute top-2 right-2 flex gap-2">
+                        <button
+                          onClick={handleCopy}
+                          className="flex items-center gap-1 px-2 py-1 bg-gray-800 rounded text-xs hover:bg-gray-700 transition-colors"
+                        >
+                          {isCopied ? (
+                            <>
+                              <Check className="w-3 h-3 text-green-400" />
+                              <span>Copied</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span>Copy</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="markdown-preview">
+                      <ReactMarkdown 
+                        components={{
+                          // Custom components for better markdown rendering
+                          h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-8 mb-4" {...props} />,
+                          h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-6 mb-3" {...props} />,
+                          h3: ({node, ...props}) => <h3 className="text-lg font-bold mt-4 mb-2" {...props} />,
+                          p: ({node, ...props}) => <p className="my-3 leading-relaxed" {...props} />,
+                          ul: ({node, ...props}) => <ul className="list-disc pl-6 my-3" {...props} />,
+                          ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-3" {...props} />,
+                          li: ({node, ...props}) => <li className="my-1" {...props} />,
+                          // @ts-ignore
+                          code: ({node, inline, ...props}) => 
+                            inline ? 
+                              <code className="bg-gray-700 px-1.5 py-0.5 rounded text-sm" {...props} /> :
+                              <code className="block bg-gray-700 p-4 rounded-lg overflow-x-auto my-4 text-sm" {...props} />,
+                          blockquote: ({node, ...props}) => 
+                            <blockquote className="border-l-4 border-gray-600 pl-4 my-4 italic" {...props} />,
+                          a: ({node, ...props}) => 
+                            <a className="text-blue-400 hover:text-blue-300 transition-colors" {...props} />,
+                          table: ({node, ...props}) => 
+                            <div className="overflow-x-auto my-4">
+                              <table className="min-w-full border border-gray-700" {...props} />
+                            </div>,
+                          th: ({node, ...props}) => 
+                            <th className="border border-gray-700 px-4 py-2 bg-gray-700" {...props} />,
+                          td: ({node, ...props}) => 
+                            <td className="border border-gray-700 px-4 py-2" {...props} />,
+                        }}
+                      >
+                        {docs.readme}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </main>
       </div>
     </div>
   );
