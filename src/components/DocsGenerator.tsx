@@ -233,15 +233,16 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
-        <nav className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-800">
+        <nav className="flex flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-800">
           <div className="flex items-center gap-3">
             <BookOpen className="w-8 h-8 text-blue-400" />
-            <h1 className="text-2xl sm:text-3xl font-bold">GitHub Readme Generator</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold max-sm:hidden">GitHub Readme Generator</h1>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm sm:text-base text-gray-300">
+            {/* <span className="text-sm sm:text-base text-gray-300">
               Welcome, {session.user?.name}
-            </span>
+            </span> */}
+            <img src={session.user?.image ?? ""} className="size-10 rounded-full" alt={session.user?.name ?? ""} />
             <button
               onClick={() => signOut()}
               className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"

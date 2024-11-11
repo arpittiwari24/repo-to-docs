@@ -3,6 +3,7 @@ import authOptions from "@/lib/auth-options";
 import { redirect } from "next/navigation";
 import LoginButton from "@/components/LoginButton";
 import DocsGenerator from "@/components/DocsGenerator";
+import Testimonials from "@/components/Testimonials";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
