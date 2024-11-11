@@ -305,7 +305,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
                 ) : (
                   <>
                     <BookOpen className="w-4 h-4" />
-                    <span>Generate Docs</span>
+                    <span>Generate Readme</span>
                   </>
                 )}
               </button>
