@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.7.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.456.0",
     "next": "14.2.6",
     "next-auth": "4.23.2",
@@ -18,7 +20,9 @@
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
     "react-social-media-embed": "^2.5.17",
-    "react-textarea-autosize": "^8.5.4"
+    "react-textarea-autosize": "^8.5.4",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",

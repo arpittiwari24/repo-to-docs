@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import LoginButton from "@/components/LoginButton";
 import DocsGenerator from "@/components/DocsGenerator";
 import Testimonials from "@/components/Testimonials";
+import { PenIcon } from "lucide-react";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -11,10 +12,18 @@ export default async function Home() {
   // If no session exists, show login page
   if (!session) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900">
-        <h1 className="text-4xl font-bold mb-8 text-white max-sm:text-center">AI GitHub Readme Generator</h1>
-        <LoginButton />
-      </div>
+      <div className=" bg-gradient-to-tr from-black to-gray-800">
+        <nav className="flex flex-row items-center justify-between gap-4 p-2">
+          <div className="flex items-center gap-3">
+            <PenIcon className="w-8 h-8 max-sm:size-6 text-white" />
+            <h1 className="text-2xl sm:text-3xl font-bold  text-white">PenAI</h1>
+          </div>
+        </nav>
+        <div className="min-h-screen flex flex-col items-center justify-center max-sm:px-2">
+          <h1 className="text-6xl max-sm:text-5xl font-bold mb-4 text-white text-center"><span className="">AI</span> GitHub Readme Generator</h1>
+          <p className="mt-4 mb-10 text-gray-200 text-lg text-center">Generate a beautiful README.md file for your GitHub repository using AI.</p>
+          <LoginButton />
+        </div></div>
     );
   }
 

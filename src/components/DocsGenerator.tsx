@@ -14,7 +14,8 @@ import {
   Save, 
   ExternalLink, 
   Search,
-  ChevronDown 
+  ChevronDown, 
+  Pen
 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -230,13 +231,13 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
   );
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-tr from-black to-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <nav className="flex flex-row items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-800">
           <div className="flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-blue-400" />
-            <h1 className="text-2xl sm:text-3xl font-bold max-sm:hidden">GitHub Readme Generator</h1>
+            <Pen className="w-8 h-8 text-white" />
+            <h1 className="text-2xl sm:text-3xl font-bold max-sm:hidden">PenAI</h1>
           </div>
           <div className="flex items-center gap-4">
             {/* <span className="text-sm sm:text-base text-gray-300">
@@ -248,7 +249,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
               className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Log out</span>
+              <span className="hidden sm:inline ">Log out</span>
             </button>
           </div>
         </nav>
@@ -295,7 +296,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
               <button
                 onClick={generateDocs}
                 disabled={!selectedRepo || isLoading}
-                className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed min-w-[160px] sm:min-w-[180px]"
+                className="flex items-center justify-center gap-2 px-6 py-2.5 !bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed min-w-[160px] sm:min-w-[180px]"
               >
                 {isLoading ? (
                   <>
