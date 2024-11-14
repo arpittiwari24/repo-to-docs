@@ -88,34 +88,33 @@ export async function POST(req: Request) {
 
         const prompt = `You are an expert developer tasked with creating a comprehensive README.md file for a GitHub repository. 
         
-Repository Information:
-Name: ${repoMetadata.name}
-Description: ${repoMetadata.description || 'No description provided'}
-URL: ${repoMetadata.html_url}
-Default Branch: ${repoMetadata.default_branch}
-License: ${repoMetadata.license?.name || 'Not specified'}
+    Repository Information:
+    Name: ${repoMetadata.name}
+    Description: ${repoMetadata.description || 'No description provided'}
+    URL: ${repoMetadata.html_url}
+    Default Branch: ${repoMetadata.default_branch}
+    License: ${repoMetadata.license?.name || 'Not specified'}
 
-Based on the following repository files and their contents, generate a professional README.md file that includes:
+    Based on the following repository files and their contents, generate a professional README.md markdown file that includes:
 
-1. Project Title and Description
-2. Features and Functionality
-3. Technology Stack
-4. Project Structure
-5. Prerequisites
-6. Installation Instructions
-7. Usage Guide
-8. API Documentation (if applicable)
-9. Contributing Guidelines
-10. License Information
-11. Contact/Support Information
+    1. Project Title and Description
+    2. Features and Functionality
+    3. Technology Stack
+    4. Prerequisites
+    5. Installation Instructions
+    6. Usage Guide
+    7. API Documentation (if applicable)
+    8. Contributing Guidelines
+    9. License Information
+    10. Contact/Support Information
 
-Make the README practical, detailed, and specific to this codebase. Include actual file paths, commands, and configuration details found in the code.
+    Make the README practical, detailed, and specific to this codebase. Include actual file paths, commands, and configuration details found in the code.
 
-Here are all the repository files for analysis:
+    Here are all the repository files for analysis:
 
-${fileAnalysis}
+    ${fileAnalysis}
 
-Generate a README.md file in markdown format that accurately represents this specific project.`;
+    Generate a README.md file striclty in markdown format ( without markdown written on the top of the code ) that accurately represents this specific project.`;
 
         const readmeResponse = await openai.chat.completions.create({
             model: 'gpt-4o-mini',
