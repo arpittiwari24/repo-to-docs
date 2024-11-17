@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     creator: "@arrpitttwts",
     title: "PenAI | AI GitHub Readme Generator",
     description: "PenAI is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
-    images: "https://penai.arrpit.work/og-image.png",
+    images: "https://penai.arrpit.work/og.png",
   },
   openGraph: {
     type: "website",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: "PenAI is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
     images: [
       {
-        url: "https://penai.arrpit.work/og-image.png",
+        url: "https://penai.arrpit.work/og.png",
         width: 1200,
         height: 630,
         alt: "PenAI | AI GitHub Readme Generators",

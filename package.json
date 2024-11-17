@@ -16,6 +16,7 @@
     "next": "14.2.6",
     "next-auth": "4.23.2",
     "openai": "^4.71.1",
+    "postcss-class-rename": "^1.0.1",
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
