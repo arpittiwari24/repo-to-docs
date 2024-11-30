@@ -1,18 +1,31 @@
 'use client'
 
 import React from 'react'
-import { XEmbed, YouTubeEmbed } from 'react-social-media-embed'
+import { LinkedInEmbed, XEmbed, YouTubeEmbed } from 'react-social-media-embed'
+import { Tweet } from 'react-tweet'
 
 function Testimonials() {
     return (
-        <div className='flex flex-col items-center'>
-            <h2>Demo</h2>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }} className='w-full rounded-md'>
-                <YouTubeEmbed url="https://youtu.be/xYlD4HEFW_c" width={1000} height={500} />
+        <div className=''>
+            <h2 className='text-3xl font-bold text-white text-center '>Some Comments</h2>
+            <div className='flex flex-row items-center justify-center gap-2'>
+                <div data-theme="dark">
+                    <Tweet id="1855841219751874755" />
+                </div>
+                <div data-theme="dark">
+                    <Tweet id="1855682039057699235" />
+                </div>
+                <div data-theme="dark">
+                    <Tweet id="1855699123904684039" />
+                </div>
+                <div data-theme="dark">
+                    <Tweet id="1855650990491590678" />
+                </div>
+                {/* <div data-theme="dark">
+                <Tweet id="1856002811609362634" />
+            </div> */}
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <XEmbed url="https://x.com/AdarshNJena/status/1855841219751874755" width={325} height={1000} />
-            </div>
+            {/* <YouTubeEmbed url='https://www.youtube.com/watch?v=xYlD4HEFW_c' /> */}
         </div>
     )
 }
