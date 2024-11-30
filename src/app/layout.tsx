@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "PenAI | AI GitHub Readme Generator",
   description: "PenAI is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
+  keywords : "PenAI, AI, GitHub, Readme, Generator, AI GitHub Readme Generator, GitHub Readme Generator, Readme Generator, AI Readme Generator , PenAI Readme Generator", 
   twitter: {
     card: "summary_large_image",
     site: "@arrpitttwts",
