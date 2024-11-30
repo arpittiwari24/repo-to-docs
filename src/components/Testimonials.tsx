@@ -6,9 +6,9 @@ import { Tweet } from 'react-tweet'
 
 function Testimonials() {
     return (
-        <div className=''>
-            <h2 className='text-3xl font-bold text-white text-center '>Some Comments</h2>
-            <div className='flex flex-row items-center justify-center gap-2'>
+        <div className='max-sm:px-2'>
+            <h2 className='text-3xl font-bold text-white text-center max-sm:pt-10 '>Some Comments</h2>
+            <div className='flex flex-row max-sm:flex-col items-center justify-center gap-2'>
                 <div data-theme="dark">
                     <Tweet id="1855841219751874755" />
                 </div>
