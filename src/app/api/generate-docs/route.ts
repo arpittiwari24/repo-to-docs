@@ -1,5 +1,23 @@
 import { NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// import { createGoogleGenerativeAI } from '@ai-sdk/google';
+// import { generateObject, generateText } from 'ai';
+// import { z } from 'zod';
+
+// // const { text } = await generateText({
+// //   model: google('gemini-1.5-pro-latest'),
+// //   prompt: 'Write a vegetarian lasagna recipe for 4 people.',
+// // });
+
+// console.log(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
+// const google = createGoogleGenerativeAI({
+//     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY
+// })
+
+const genAI = new GoogleGenerativeAI("AIzaSyCKfOOuoAVSXz9CBr36JgznlCvTHMBvRRk");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -116,23 +134,28 @@ export async function POST(req: Request) {
 
     Generate a README.md file striclty in markdown format ( without markdown written on the top of the code ) that accurately represents this specific project.`;
 
-        const readmeResponse = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are a technical documentation expert who specializes in creating clear, comprehensive README files for software projects.'
-                },
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            temperature: 0.7,
-            max_tokens: 4000
-        });
+        // const readmeResponse = await openai.chat.completions.create({
+        //     model: 'gpt-4o-mini',
+        //     messages: [
+        //         {
+        //             role: 'system',
+        //             content: 'You are a technical documentation expert who specializes in creating clear, comprehensive README files for software projects.'
+        //         },
+        //         {
+        //             role: 'user',
+        //             content: prompt
+        //         }
+        //     ],
+        //     temperature: 0.7,
+        //     max_tokens: 4000
+        // });
 
-        const readme = readmeResponse.choices[0]?.message?.content || 'Failed to generate README';
+        // const readme = readmeResponse.choices[0]?.message?.content || 'Failed to generate README';
+
+        const result = await model.generateContent(prompt);
+        // console.log(result.response.text());
+        
+        const readme = result.response.text();
 
         return NextResponse.json({
             readme,
