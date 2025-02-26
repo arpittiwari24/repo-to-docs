@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth";
 import authOptions from "@/lib/auth-options";
-import { redirect } from "next/navigation";
 import LoginButton from "@/components/LoginButton";
-import DocsGenerator from "@/components/DocsGenerator";
 import Testimonials from "@/components/Testimonials";
 import { PenIcon } from "lucide-react";
+import AppLayout from "@/components/app-layout";
+import Dashboard from "@/components/dashboard";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -30,5 +30,9 @@ export default async function Home() {
     );
   }
 
-  return <DocsGenerator session={session} />;
+  return (
+    <AppLayout session={session}>
+      <Dashboard session={session} />
+    </AppLayout>
+  )
 }
