@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 9999",
-    "build": "next build",
+    "build": "prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
     "shadcn": "bunx --bun shadcn@latest add"
