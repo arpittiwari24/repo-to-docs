@@ -15,10 +15,13 @@ import {
   ExternalLink, 
   Search,
   ChevronDown, 
-  Pen
+  Pen,
+  Github,
+  AlertCircle
 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
+import toast from "react-hot-toast";
 
 interface Repository {
   id: number;
@@ -34,10 +37,21 @@ interface Repository {
 }
 
 interface GeneratedDocs {
+  id: string;
   readme: string;
   repositoryUrl: string;
   repositoryName: string;
   fileCount: number;
+}
+
+interface ReadmeHistory {
+  id: string;
+  repo_name: string;
+  repo_url: string;
+  markdown: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface DocsGeneratorProps {
@@ -84,6 +98,8 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
   const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
   const [docs, setDocs] = useState<GeneratedDocs | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCommitting, setIsCommitting] = useState(false);
+  const [commitSuccess, setCommitSuccess] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -92,6 +108,8 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentQuote, setCurrentQuote] = useState(loadingQuotes[0]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>([]);
+  const [isLoadingReadmes, setIsLoadingReadmes] = useState(false);
 
   useEffect(() => {
     let quoteInterval: NodeJS.Timeout;
@@ -157,7 +175,28 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
     };
     
     fetchRepos();
+    fetchRecentReadmes();
   }, [session?.user?.accessToken]);
+
+  const fetchRecentReadmes = async () => {
+    if (!session?.user) return;
+    
+    try {
+      setIsLoadingReadmes(true);
+      const response = await fetch('/api/generate-docs');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch recent READMEs');
+      }
+      
+      const data = await response.json();
+      setRecentReadmes(data);
+    } catch (error) {
+      console.error('Error fetching recent READMEs:', error);
+    } finally {
+      setIsLoadingReadmes(false);
+    }
+  };
 
   const generateDocs = async () => {
     if (!selectedRepo || !session?.user?.accessToken) return;
@@ -165,6 +204,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
     setIsLoading(true);
     setError(null);
     setDocs(null);
+    setCommitSuccess(null);
     
     try {
       const response = await fetch('/api/generate-docs', {
@@ -185,11 +225,65 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
       const data = await response.json();
       setDocs(data);
       setIsSearchOpen(false);
+      
+      // Refresh the list of recent READMEs
+      fetchRecentReadmes();
     } catch (error) {
       setError('Failed to generate documentation. Please try again.');
       console.error('Error generating documentation:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const commitToRepo = async () => {
+    if (!selectedRepo || !session?.user?.accessToken || !docs) return;
+    
+    setIsCommitting(true);
+    setError(null);
+    setCommitSuccess(null);
+    
+    try {
+      const readmeContent = isEditing ? editedReadme : docs.readme;
+      
+      const response = await fetch('/api/commit-readme', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: session.user.accessToken,
+          repoName: selectedRepo,
+          readmeContent: readmeContent,
+          readmeId: docs.id
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to commit README');
+      }
+
+      const data = await response.json();
+      setCommitSuccess(data.commitUrl);
+      
+      // If we were in edit mode, update the docs state with edited content
+      if (isEditing) {
+        setDocs({
+          ...docs,
+          readme: editedReadme
+        });
+        setIsEditing(false);
+      }
+      
+      // Refresh the list of recent READMEs
+      fetchRecentReadmes();
+      
+    } catch (error: any) {
+      setError(`Failed to commit README: ${error.message}`);
+      console.error('Error committing README:', error);
+    } finally {
+      setIsCommitting(false);
     }
   };
 
@@ -209,7 +303,7 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsEditing(false);
     if (docs) {
       setDocs({
@@ -217,13 +311,40 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
         readme: editedReadme
       });
     }
+
+    await fetch(`/api/saved/${docs?.id}`, {
+      method : "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        readme : editedReadme
+      }),
+    })
+
+    toast.success("Saved Successfully")
   };
+
 
   const handleCancel = () => {
     setIsEditing(false);
     if (docs) {
       setEditedReadme(docs.readme);
     }
+  };
+
+  const loadReadme = (readme: ReadmeHistory) => {
+    setDocs({
+      id: readme.id,
+      readme: readme.markdown,
+      repositoryUrl: readme.repo_url,
+      repositoryName: readme.repo_name,
+      fileCount: 0 // No file count info for saved READMEs
+    });
+    setSelectedRepo(readme.repo_name);
+    setEditedReadme(readme.markdown);
+    setCommitSuccess(null);
+    setError(null);
   };
 
   const filteredRepos = repos.filter(repo => 
@@ -240,16 +361,13 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
             <h1 className="text-2xl sm:text-3xl font-bold max-sm:hidden">PenAI</h1>
           </div>
           <div className="flex items-center gap-4">
-            {/* <span className="text-sm sm:text-base text-gray-300">
-              Welcome, {session.user?.name}
-            </span> */}
             <img src={session.user?.image ?? ""} className="size-10 rounded-full" alt={session.user?.name ?? ""} />
             <button
               onClick={() => signOut()}
               className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline ">Log out</span>
+              <span className="hidden sm:inline">Log out</span>
             </button>
           </div>
         </nav>
@@ -318,10 +436,30 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
             )}
           </div>
 
+          {/* Success Message */}
+          {commitSuccess && (
+            <div className="p-4 bg-green-900/50 border border-green-700 rounded-lg flex items-start gap-3">
+              <Check className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium">README.md successfully committed to GitHub!</p>
+                <a 
+                  href={commitSuccess} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1 mt-1"
+                >
+                  <span>View commit</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+          )}
+
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-red-900/50 border border-red-700 rounded-lg text-sm">
-              {error}
+            <div className="p-4 bg-red-900/50 border border-red-700 rounded-lg flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+              <p className="text-sm">{error}</p>
             </div>
           )}
 
@@ -350,12 +488,29 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold">{docs.repositoryName}</h2>
                     <p className="mt-1 text-sm text-gray-400">
-                      Generated from {docs.fileCount} files
+                      {docs.fileCount > 0 ? `Generated from ${docs.fileCount} files` : "Saved README"}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     {!isEditing ? (
                       <>
+                        <button
+                          onClick={commitToRepo}
+                          disabled={isCommitting}
+                          className="flex items-center gap-2 px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm"
+                        >
+                          {isCommitting ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>Committing...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Github className="w-4 h-4" />
+                              <span>Commit to Repo</span>
+                            </>
+                          )}
+                        </button>
                         <button
                           onClick={handleEdit}
                           className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors text-sm"
@@ -481,8 +636,65 @@ export default function DocsGenerator({ session }: DocsGeneratorProps) {
               </div>
             </div>
           )}
+
+          {/* History of Previously Generated READMEs */}
+          {!isLoading && !docs && (
+            <div className="bg-gray-800 rounded-lg overflow-hidden">
+              <div className="p-4 sm:p-6 border-b border-gray-700">
+                <h2 className="text-xl font-bold">Recent READMEs</h2>
+                <p className="mt-1 text-sm text-gray-400">
+                  Your previously generated documentation
+                </p>
+              </div>
+              <div className="p-4 sm:p-6">
+                {isLoadingReadmes ? (
+                  <div className="text-center text-gray-400 py-6">
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Loading recent READMEs...
+                    </span>
+                  </div>
+                ) : recentReadmes.length > 0 ? (
+                  <div className="space-y-4">
+                    {recentReadmes.map((readme) => (
+                      <div 
+                        key={readme.id}
+                        className="p-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
+                        onClick={() => loadReadme(readme)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-medium">{readme.repo_name}</h3>
+                          <span className="text-xs text-gray-400">
+                            {new Date(readme.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="mt-2 text-sm text-gray-300 line-clamp-2">
+                          {readme.markdown.slice(0, 150)}...
+                        </div>
+                        <div className="mt-2 flex items-center gap-1 text-blue-400 text-xs">
+                          <ExternalLink className="w-3 h-3" />
+                          <a 
+                            href={readme.repo_url}
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            View Repository
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-gray-400 py-6">
+                    No recent READMEs. Select a repository and generate a README to get started.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </div>
-  );
+  )
 }

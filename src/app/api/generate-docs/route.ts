@@ -1,25 +1,13 @@
 import { NextResponse } from 'next/server';
-import { OpenAI } from 'openai';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getServerSession } from "next-auth/next";
+import { PrismaClient } from "@prisma/client";
+import crypto from 'crypto';
+import authOptions from '@/lib/auth-options';
 
-// import { createGoogleGenerativeAI } from '@ai-sdk/google';
-// import { generateObject, generateText } from 'ai';
-// import { z } from 'zod';
-
-// // const { text } = await generateText({
-// //   model: google('gemini-1.5-pro-latest'),
-// //   prompt: 'Write a vegetarian lasagna recipe for 4 people.',
-// // });
-
-// console.log(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
-// const google = createGoogleGenerativeAI({
-//     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY
-// })
-
+const prisma = new PrismaClient();
 const genAI = new GoogleGenerativeAI("AIzaSyCKfOOuoAVSXz9CBr36JgznlCvTHMBvRRk");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 interface FileContent {
     name: string;
@@ -79,6 +67,11 @@ async function fetchDirectoryContent(repoName: string, accessToken: string, path
 
 export async function POST(req: Request) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         const { accessToken, repoName } = await req.json();
 
         // Step 1: Fetch repo metadata
@@ -134,30 +127,35 @@ export async function POST(req: Request) {
 
     Generate a README.md file striclty in markdown format ( without markdown written on the top of the code ) that accurately represents this specific project.`;
 
-        // const readmeResponse = await openai.chat.completions.create({
-        //     model: 'gpt-4o-mini',
-        //     messages: [
-        //         {
-        //             role: 'system',
-        //             content: 'You are a technical documentation expert who specializes in creating clear, comprehensive README files for software projects.'
-        //         },
-        //         {
-        //             role: 'user',
-        //             content: prompt
-        //         }
-        //     ],
-        //     temperature: 0.7,
-        //     max_tokens: 4000
-        // });
-
-        // const readme = readmeResponse.choices[0]?.message?.content || 'Failed to generate README';
-
         const result = await model.generateContent(prompt);
-        // console.log(result.response.text());
         
-        const readme = result.response.text();
+        let readme = result.response.text();
+
+        readme = readme.replace(/^```markdown\n/, '').replace(/\n```$/, '');
+
+        const user = await prisma.user.findUnique({
+            where: {
+                email: session?.user?.email!
+            }
+        });
+
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        // Store the generated README in the database
+        const savedReadme = await prisma.readme.create({
+            data: {
+                id : crypto.randomUUID(),
+                repo_name: repoName,
+                repo_url: repoMetadata.html_url,
+                markdown: readme,
+                userId: user?.id 
+            }
+        });
 
         return NextResponse.json({
+            id: savedReadme.id,
             readme,
             repositoryUrl: repoMetadata.html_url,
             repositoryName: repoMetadata.name,
@@ -169,3 +167,30 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Failed to generate documentation' }, { status: 500 });
     }
 }
+
+
+
+export async function GET(req: Request) {
+    try {
+      const session = await getServerSession(authOptions);
+      if (!session || !session.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+  
+      // Get the user's recent READMEs
+      const readmes = await prisma.readme.findMany({
+        where: {
+          userId: session.user.id
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 10
+      });
+  
+      return NextResponse.json(readmes);
+    } catch (error) {
+      console.error('Error fetching READMEs:', error);
+      return NextResponse.json({ error: 'Failed to fetch READMEs' }, { status: 500 });
+    }
+  }

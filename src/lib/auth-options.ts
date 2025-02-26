@@ -1,7 +1,9 @@
 import GitHubProvider from "next-auth/providers/github";
 import { NextAuthOptions, User } from "next-auth";
 import { Adapter } from "next-auth/adapters";
-import { SupabaseAdapter } from "@auth/supabase-adapter";
+import { prisma } from "./prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
 declare module "next-auth" {
   interface User {
     accessToken?: string;
@@ -34,10 +36,7 @@ const authOptions: NextAuthOptions = {
           },
         })
       ],
-  adapter: SupabaseAdapter({
-       url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-       secret: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY ?? "",
-     }) as Adapter,
+  adapter: PrismaAdapter(prisma) as Adapter,
     secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: "jwt"

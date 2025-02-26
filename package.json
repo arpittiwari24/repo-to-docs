@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/google": "^1.0.16",
     "@ai-sdk/react": "^1.0.10",
+    "@auth/prisma-adapter": "^2.7.4",
     "@auth/supabase-adapter": "^1.7.3",
     "@google/generative-ai": "^0.21.0",
     "ai": "^4.0.34",
@@ -19,10 +20,10 @@
     "lucide-react": "^0.456.0",
     "next": "14.2.6",
     "next-auth": "4.23.2",
-    "openai": "^4.71.1",
     "postcss-class-rename": "^1.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.5.2",
     "react-markdown": "^9.0.1",
     "react-social-media-embed": "^2.5.17",
     "react-textarea-autosize": "^8.5.4",
@@ -32,11 +33,13 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@prisma/client": "^6.4.1",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
+    "prisma": "^6.4.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
