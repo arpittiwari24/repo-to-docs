@@ -81,13 +81,13 @@ export default function AppLayout({ session, children }: LayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen bg-white text-black">
+    <div className="flex min-h-screen  text-white!">
       {/* Desktop Sidebar - FIXED HEIGHT */}
-      <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800">
-        <div className="flex flex-col h-screen sticky top-0 bg-white bg-opacity-50 backdrop-blur-sm">
+      <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800 ">
+        <div className="flex flex-col h-screen sticky top-0 bg-black text-white bg-opacity-50 backdrop-blur-sm">
           {/* Logo/Brand */}
           <div className="flex items-center justify-center py-4 border-b border-gray-800">
-            <Pen className="w-8 h-8 text-black" />
+            <Pen className="w-8 h-8 text-white" />
             <h1 className="ml-2 text-2xl font-bold">PenAI</h1>
           </div>
           
@@ -97,7 +97,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
               <Link 
                 href="/" 
                 className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
+                  isActive('/') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
                 }`}
                 prefetch={true}
               >
@@ -108,7 +108,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
               <Link 
                 href="/new-readme" 
                 className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/new-readme') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
+                  isActive('/new-readme') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
                 }`}
                 prefetch={true}
               >
@@ -137,7 +137,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
                       key={readme.id}
                       href={`/readme/${readme.id}`}
                       className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                        isActive(`/readme/${readme.id}`) ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
+                        isActive(`/readme/${readme.id}`) ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
                       }`}
                       onClick={() => setOpen(false)}
                       prefetch={true}
@@ -215,7 +215,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
                 <Link 
                   href="/" 
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
+                    isActive('/') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
                   }`}
                   onClick={() => setOpen(false)}
                   prefetch={true}
@@ -227,7 +227,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
                 <Link 
                   href="/new-readme" 
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/new-readme') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
+                    isActive('/new-readme') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
                   }`}
                   onClick={() => setOpen(false)}
                   prefetch={true}
@@ -256,7 +256,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
                         key={readme.id}
                         href={`/readme/${readme.id}`}
                         className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                          isActive(`/readme/${readme.id}`) ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
+                          isActive(`/readme/${readme.id}`) ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
                         }`}
                         onClick={() => setOpen(false)}
                         prefetch={true}

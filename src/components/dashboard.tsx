@@ -96,7 +96,7 @@ export default function Dashboard({ session }: DashboardProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
           <p className="text-gray-400 mt-1">Welcome to your README generator</p>
         </div>
        <Link href={"/new-readme"} prefetch={true}>
@@ -131,17 +131,20 @@ export default function Dashboard({ session }: DashboardProps) {
         </Card> */}
 
         {isLoading ? (
-          <Card className="bg-gray-100 border-gray-200 col-span-1">
+          <Card className="bg-transparent border-gray-200 col-span-1">
             <CardContent className="flex items-center justify-center h-64">
               <Loader2 className="w-8 h-8 animate-spin text-pink-400" />
             </CardContent>
           </Card>
         ) : recentReadmes.length > 0 ? (
           recentReadmes.slice(0, 5).map((readme) => (
-            <Card key={readme.id} className="bg-gray-50 border-gray-700">
+            <Card 
+            key={readme.id} 
+            className="bg-white/5 backdrop-blur-md border border-gray-700/40 shadow-lg hover:bg-white/10 transition-colors duration-300"
+          >
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="truncate">{readme.repo_name}</CardTitle>
+                  <CardTitle className="truncate text-white">{readme.repo_name}</CardTitle>
                   <div className="flex items-center text-xs text-gray-400">
                     <Clock className="w-3 h-3 mr-1" />
                     {formatDate(readme.createdAt)}
@@ -166,9 +169,9 @@ export default function Dashboard({ session }: DashboardProps) {
                                 <ReactMarkdown
                                   components={{
                                     // Custom components for better markdown rendering
-                                    h1: ({node, ...props}) => <h1 className="text-xl font-bold mt-8 mb-4 text-gray-700" {...props} />,
-                                    h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-6 mb-3 text-gray-600" {...props} />,
-                                    h3: ({node, ...props}) => <h3 className="text-md font-bold mt-4 mb-2 text-gray-600" {...props} />,
+                                    h1: ({node, ...props}) => <h1 className="text-xl font-bold mt-8 mb-4 text-gray-300" {...props} />,
+                                    h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-6 mb-3 text-gray-400" {...props} />,
+                                    h3: ({node, ...props}) => <h3 className="text-md font-bold mt-4 mb-2 text-gray-500" {...props} />,
                                     p: ({node, ...props}) => <p className="my-3 leading-relaxed text-gray-500" {...props} />,
                                     ul: ({node, ...props}) => <ul className="list-disc pl-6 my-3" {...props} />,
                                     ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-3" {...props} />,

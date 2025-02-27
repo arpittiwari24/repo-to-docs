@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body, html {
+  background-image: url('/bg.svg') !important;
+  background-repeat: repeat;
+  background-color: #0d1117; /* Fallback color */
+}
 body {
   overflow-y: scroll;
 }
