@@ -49,7 +49,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>([]);
-  const [isLoadingReadmes, setIsLoadingReadmes] = useState(false);
+  const [isLoadingReadmes, setIsLoadingReadmes] = useState(true);
   const [open, setOpen] = useState(false);
   
   useEffect(() => {
@@ -81,13 +81,13 @@ export default function AppLayout({ session, children }: LayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-tr from-black to-gray-800 text-white">
+    <div className="flex min-h-screen bg-white text-black">
       {/* Desktop Sidebar - FIXED HEIGHT */}
       <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800">
-        <div className="flex flex-col h-screen sticky top-0 bg-black bg-opacity-50 backdrop-blur-sm">
+        <div className="flex flex-col h-screen sticky top-0 bg-white bg-opacity-50 backdrop-blur-sm">
           {/* Logo/Brand */}
           <div className="flex items-center justify-center py-4 border-b border-gray-800">
-            <Pen className="w-8 h-8 text-white" />
+            <Pen className="w-8 h-8 text-black" />
             <h1 className="ml-2 text-2xl font-bold">PenAI</h1>
           </div>
           
@@ -97,8 +97,9 @@ export default function AppLayout({ session, children }: LayoutProps) {
               <Link 
                 href="/" 
                 className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/') ? 'bg-blue-900 bg-opacity-50 text-blue-300' : 'hover:bg-gray-800'
+                  isActive('/') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
                 }`}
+                prefetch={true}
               >
                 <Home className="w-5 h-5 mr-3" />
                 <span>Dashboard</span>
@@ -107,8 +108,9 @@ export default function AppLayout({ session, children }: LayoutProps) {
               <Link 
                 href="/new-readme" 
                 className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/new-readme') ? 'bg-blue-900 bg-opacity-50 text-blue-300' : 'hover:bg-gray-800'
+                  isActive('/new-readme') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
                 }`}
+                prefetch={true}
               >
                 <PlusCircle className="w-5 h-5 mr-3" />
                 <span>New README</span>
@@ -135,9 +137,10 @@ export default function AppLayout({ session, children }: LayoutProps) {
                       key={readme.id}
                       href={`/readme/${readme.id}`}
                       className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                        isActive(`/readme/${readme.id}`) ? 'bg-blue-900 bg-opacity-50 text-blue-300' : 'hover:bg-gray-800'
+                        isActive(`/readme/${readme.id}`) ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
                       }`}
                       onClick={() => setOpen(false)}
+                      prefetch={true}
                     >
                       <div className="flex items-center overflow-hidden">
                         <FileText className="w-4 h-4 min-w-4 mr-2" />
@@ -173,7 +176,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
                 <TooltipTrigger asChild>
                   <button 
                     onClick={() => signOut()} 
-                    className="ml-auto p-1.5 rounded-md hover:bg-gray-800 transition-colors"
+                    className="ml-auto p-1.5 rounded-md hover:bg-gray-300 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -212,9 +215,10 @@ export default function AppLayout({ session, children }: LayoutProps) {
                 <Link 
                   href="/" 
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/') ? 'bg-blue-900 bg-opacity-50 text-blue-300' : 'hover:bg-gray-800'
+                    isActive('/') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
                   }`}
                   onClick={() => setOpen(false)}
+                  prefetch={true}
                 >
                   <Home className="w-5 h-5 mr-3" />
                   <span>Dashboard</span>
@@ -223,9 +227,10 @@ export default function AppLayout({ session, children }: LayoutProps) {
                 <Link 
                   href="/new-readme" 
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/new-readme') ? 'bg-blue-900 bg-opacity-50 text-blue-300' : 'hover:bg-gray-800'
+                    isActive('/new-readme') ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
                   }`}
                   onClick={() => setOpen(false)}
+                  prefetch={true}
                 >
                   <PlusCircle className="w-5 h-5 mr-3" />
                   <span>New README</span>
@@ -251,9 +256,10 @@ export default function AppLayout({ session, children }: LayoutProps) {
                         key={readme.id}
                         href={`/readme/${readme.id}`}
                         className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                          isActive(`/readme/${readme.id}`) ? 'bg-blue-900 bg-opacity-50 text-blue-300' : 'hover:bg-gray-800'
+                          isActive(`/readme/${readme.id}`) ? 'bg-pink-300 bg-opacity-50 text-pink-600' : 'hover:bg-gray-300'
                         }`}
                         onClick={() => setOpen(false)}
+                        prefetch={true}
                       >
                         <div className="flex items-center overflow-hidden">
                           <FileText className="w-4 h-4 min-w-4 mr-2" />
@@ -284,7 +290,7 @@ export default function AppLayout({ session, children }: LayoutProps) {
               </div>
               <button 
                 onClick={() => signOut()} 
-                className="ml-auto p-1.5 rounded-md hover:bg-gray-800 transition-colors"
+                className="ml-auto p-1.5 rounded-md hover:bg-gray-300 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
               </button>

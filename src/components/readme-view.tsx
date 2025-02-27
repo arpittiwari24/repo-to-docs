@@ -156,7 +156,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-pink-400" />
       </div>
     );
   }
@@ -178,7 +178,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
         <p className="text-gray-400 mb-6">The requested README could not be found</p>
         <Button 
           onClick={() => router.push('/')}
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-pink-600 hover:bg-pink-700"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
@@ -264,7 +264,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
               href={commitSuccess}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center text-blue-400 hover:text-blue-300 text-sm mt-1"
+              className="flex items-center text-pink-400 hover:text-pink-300 text-sm mt-1"
             >
               <span>View commit</span>
               <ExternalLink className="w-3 h-3 ml-1" />
@@ -283,7 +283,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
                   href={readme.repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 flex items-center"
+                  className="text-pink-400 hover:text-pink-300 flex items-center"
                 >
                   <Github className="w-4 h-4 mr-1" />
                   View Repository
@@ -329,15 +329,15 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="pt-6">
-          <div className="prose prose-invert max-w-none">
+        <CardContent className="pt-6 bg-white text-black">
+          <div className="prose prose-invert max-w-none ">
             <ReactMarkdown 
               components={{
                 // Custom components for better markdown rendering
-                h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-8 mb-4" {...props} />,
-                h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-6 mb-3" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-lg font-bold mt-4 mb-2" {...props} />,
-                p: ({node, ...props}) => <p className="my-3 leading-relaxed" {...props} />,
+                h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-8 mb-4 text-black" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-xl font-bold mt-6 mb-3 text-gray-700" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-lg font-bold mt-4 mb-2 text-gray-700" {...props} />,
+                p: ({node, ...props}) => <p className="my-3 leading-relaxed text-gray-700" {...props} />,
                 ul: ({node, ...props}) => <ul className="list-disc pl-6 my-3" {...props} />,
                 ol: ({node, ...props}) => <ol className="list-decimal pl-6 my-3" {...props} />,
                 li: ({node, ...props}) => <li className="my-1" {...props} />,
@@ -345,7 +345,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
                 code: ({node, inline, className, children, ...props}) => {
                   const match = /language-(\w+)/.exec(className || '');
                   return !inline && match ? (
-                    <pre className="bg-gray-700 p-4 rounded-lg overflow-x-auto my-4">
+                    <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto my-4">
                       <code className={className} {...props}>
                         {children}
                       </code>
@@ -360,7 +360,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
                 blockquote: ({node, ...props}) => 
                   <blockquote className="border-l-4 border-gray-600 pl-4 my-4 italic" {...props} />,
                 a: ({node, ...props}) => 
-                  <a className="text-blue-400 hover:text-blue-300 transition-colors" {...props} />,
+                  <a className="text-pink-400 hover:text-pink-300 transition-colors" {...props} />,
                 table: ({node, ...props}) => 
                   <div className="overflow-x-auto my-4">
                     <table className="min-w-full border border-gray-700" {...props} />
