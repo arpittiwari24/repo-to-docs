@@ -43,45 +43,41 @@ interface ReadmeHistory {
 interface LayoutProps {
   session: Session;
   children: React.ReactNode;
+  history: ReadmeHistory[] | ReadmeHistory; // Updated to accept either array or single object
 }
 
-export default function AppLayout({ session, children }: LayoutProps) {
+export default function AppLayout({ session, children, history }: LayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>([]);
-  const [isLoadingReadmes, setIsLoadingReadmes] = useState(true);
+  const [isLoadingReadmes, setIsLoadingReadmes] = useState(false);
   const [open, setOpen] = useState(false);
   
-  useEffect(() => {
-    fetchRecentReadmes();
-  }, []);
-
-  const fetchRecentReadmes = async () => {
-    if (!session?.user) return;
-    
-    try {
-      setIsLoadingReadmes(true);
-      const response = await fetch('/api/generate-docs');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch recent READMEs');
-      }
-      
-      const data = await response.json();
-      setRecentReadmes(data);
-    } catch (error) {
-      console.error('Error fetching recent READMEs:', error);
-    } finally {
-      setIsLoadingReadmes(false);
+  // Initialize recentReadmes based on history prop type
+  const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>(() => {
+    // Check if history is an array
+    if (Array.isArray(history)) {
+      return history;
+    } 
+    // Check if history is a single object and not null/undefined
+    else if (history && typeof history === 'object') {
+      return [history];
     }
-  };
+    // Default to empty array if history is null or undefined
+    return [];
+  });
 
   const isActive = (path: string) => {
     return pathname === path;
   };
 
+  // Debug log to check what we're actually working with
+  useEffect(() => {
+    console.log("History prop:", history);
+    console.log("Recent READMEs state:", recentReadmes);
+  }, [history]);
+
   return (
-    <div className="flex min-h-screen  text-white!">
+    <div className="flex min-h-screen text-white">
       {/* Desktop Sidebar - FIXED HEIGHT */}
       <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800 ">
         <div className="flex flex-col h-screen sticky top-0 bg-black text-white bg-opacity-50 backdrop-blur-sm">

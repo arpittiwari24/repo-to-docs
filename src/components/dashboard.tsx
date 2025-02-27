@@ -37,39 +37,26 @@ interface ReadmeHistory {
 
 interface DashboardProps {
   session: Session;
+  history: ReadmeHistory[] | ReadmeHistory;
 }
 
-export default function Dashboard({ session }: DashboardProps) {
+export default function Dashboard({ session , history }: DashboardProps) {
   const router = useRouter();
-  const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>(() => {
+    // Check if history is an array
+    if (Array.isArray(history)) {
+      return history;
+    } 
+    // Check if history is a single object and not null/undefined
+    else if (history && typeof history === 'object') {
+      return [history];
+    }
+    // Default to empty array if history is null or undefined
+    return [];
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchRecentReadmes();
-  }, []);
-
-  const fetchRecentReadmes = async () => {
-    if (!session?.user) return;
-    
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/generate-docs');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch recent READMEs');
-      }
-      
-      const data = await response.json();
-      setRecentReadmes(data);
-    } catch (error) {
-      console.error('Error fetching recent READMEs:', error);
-      setError('Failed to load your recent READMEs');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleCopy = async (readmeId: string, content: string) => {
     try {

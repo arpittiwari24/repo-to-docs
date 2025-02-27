@@ -163,7 +163,17 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
     try {
       const session = await getServerSession(authOptions);
-      if (!session || !session.user) {
+      
+      // Add detailed logging to debug the session
+      console.log("API Route Session:", 
+        session ? {
+          hasUser: !!session.user,
+          userId: session.user?.id,
+          email: session.user?.email
+        } : "No session");
+      
+      if (!session || !session.user || !session.user.id) {
+        console.error("Unauthorized access attempt - session details missing");
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
   
@@ -178,9 +188,13 @@ export async function GET(req: Request) {
         take: 10
       });
   
+      console.log(`Successfully fetched ${readmes.length} readmes for user ${session.user.id}`);
       return NextResponse.json(readmes);
     } catch (error) {
       console.error('Error fetching READMEs:', error);
-      return NextResponse.json({ error: 'Failed to fetch READMEs' }, { status: 500 });
+      return NextResponse.json({ 
+        error: 'Failed to fetch READMEs', 
+        details: error instanceof Error ? error.message : String(error) 
+      }, { status: 500 });
     }
   }
