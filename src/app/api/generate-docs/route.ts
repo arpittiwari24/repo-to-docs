@@ -133,16 +133,6 @@ export async function POST(req: Request) {
 
         readme = readme.replace(/^```markdown\n/, '').replace(/\n```$/, '');
 
-        const user = await prisma.user.findUnique({
-            where: {
-                email: session?.user?.email!
-            }
-        });
-
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
         // Store the generated README in the database
         const savedReadme = await prisma.readme.create({
             data: {
@@ -150,7 +140,7 @@ export async function POST(req: Request) {
                 repo_name: repoName,
                 repo_url: repoMetadata.html_url,
                 markdown: readme,
-                userId: user?.id 
+                userId: session.user.id!
             }
         });
 
