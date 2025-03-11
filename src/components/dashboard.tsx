@@ -245,7 +245,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
           <Card className="bg-gray-800 border-gray-700 col-span-1 md:col-span-2">
             <CardContent className="flex flex-col items-center justify-center h-64 text-center">
               <FileText className="w-12 h-12 text-gray-500 mb-4" />
-              <h3 className="text-lg font-medium mb-2">No READMEs Found</h3>
+              <h3 className="text-lg font-medium mb-2 text-white">No READMEs Found</h3>
               <p className="text-gray-400 max-w-md">
                 You haven't created any READMEs yet. Click the "Create New README" button to get started.
               </p>
