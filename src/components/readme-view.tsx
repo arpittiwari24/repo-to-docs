@@ -157,7 +157,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="w-8 h-8 animate-spin text-pink-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
       </div>
     );
   }
@@ -179,7 +179,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
         <p className="text-gray-400 mb-6">The requested README could not be found</p>
         <Button 
           onClick={() => router.push('/')}
-          className="bg-pink-600 hover:bg-pink-700"
+          className="bg-cyan-600 hover:bg-cyan-700"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Dashboard
@@ -201,23 +201,23 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
             <ArrowLeft className="w-4 h-4 mr-1" />
             <span>Back</span>
           </Button>
-          <h1 className="text-2xl font-bold">{readme.repo_name}</h1>
+          <h1 className="text-2xl font-bold max-sm:hidden">{readme.repo_name}</h1>
         </div>
         <div className="flex space-x-2">
           <Link href={`/readme/${readmeId}/edit`} prefetch={true}>
           <Button
             variant="outline"
-            className="border-gray-700 hover:bg-gray-700"
+            className="border-gray-700 hover:bg-gray-300 text-black"
           >
             <Edit2 className="w-4 h-4 mr-2" />
-            Edit
+            <span className="max-sm:hidden">Edit</span>
           </Button>
           </Link>
           <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
             <DialogTrigger asChild>
               <Button variant="destructive" className="bg-red-700 hover:bg-red-800">
                 <Trash2 className="w-4 h-4 mr-2" />
-                Delete
+                <span className="max-sm:hidden">Delete</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-gray-800 border-gray-700 text-white">
@@ -266,7 +266,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
               href={commitSuccess}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center text-pink-400 hover:text-pink-300 text-sm mt-1"
+              className="flex items-center text-cyan-400 hover:text-cyan-300 text-sm mt-1"
             >
               <span>View commit</span>
               <ExternalLink className="w-3 h-3 ml-1" />
@@ -277,18 +277,18 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
 
       <Card className="bg-gray-800 border-gray-700">
         <CardHeader className="border-b border-gray-700">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between w-full">
             <div>
-              <CardTitle>{readme.repo_name}</CardTitle>
-              <CardDescription className="flex items-center mt-1">
+              <CardTitle className="text-gray-200 max-sm:hidden">{readme.repo_name}</CardTitle>
+              <CardDescription className="flex items-center mt-1 max-sm:mr-2">
                 <a 
                   href={readme.repo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-pink-400 hover:text-pink-300 flex items-center"
+                  className="text-cyan-400 hover:text-cyan-300 flex items-center"
                 >
                   <Github className="w-4 h-4 mr-1" />
-                  View Repository
+                  View <span className="max-sm:hidden">Repository</span>
                   <ExternalLink className="w-3 h-3 ml-1" />
                 </a>
               </CardDescription>
@@ -302,12 +302,12 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
                 {isCopied ? (
                   <>
                     <Check className="w-4 h-4 mr-2 text-green-400" />
-                    Copied
+                    <span className="max-sm:hidden">Copied</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4 mr-2" />
-                    Copy
+                    <span className="max-sm:hidden">Copy</span>
                   </>
                 )}
               </Button>
@@ -324,7 +324,8 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
                 ) : (
                   <>
                     <Github className="w-4 h-4 mr-2" />
-                    Commit to Repo
+                    <span className="max-sm:hidden">Commit to Repo</span>
+                    <span className="md:hidden">Commit</span>
                   </>
                 )}
               </Button>
@@ -332,7 +333,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
           </div>
         </CardHeader>
         <CardContent className="pt-6 text-white">
-          <div className="prose prose-invert max-w-none ">
+          <div className="prose prose-invert max-w-none max-sm:break-words">
             <ReactMarkdown 
               components={{
                 // Custom components for better markdown rendering
@@ -362,7 +363,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
                 blockquote: ({node, ...props}) => 
                   <blockquote className="border-l-4 border-gray-600 pl-4 my-4 italic" {...props} />,
                 a: ({node, ...props}) => 
-                  <a className="text-pink-400 hover:text-pink-300 transition-colors" {...props} />,
+                  <a className="text-cyan-400 hover:text-cyan-300 transition-colors" {...props} />,
                 table: ({node, ...props}) => 
                   <div className="overflow-x-auto my-4">
                     <table className="min-w-full border border-gray-700" {...props} />

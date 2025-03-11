@@ -191,7 +191,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
         <p className="text-gray-400 mt-1">Generate a comprehensive README for your GitHub repository</p>
       </div>
 
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-gray-200 border-gray-700">
         <CardHeader>
           <CardTitle>Select Repository</CardTitle>
           <CardDescription>
@@ -204,21 +204,21 @@ export default function NewReadme({ session }: NewReadmeProps) {
               <Input
                 type="text"
                 placeholder="Search repositories..."
-                className="bg-gray-900 border-gray-700 focus-visible:ring-blue-600"
+                className="bg-gray-900 border-gray-700 focus-visible:ring-blue-600 text-gray-100"
                 value={searchTerm}
                 // @ts-ignore
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onFocus={() => setIsSearchOpen(true)}
               />
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-100" />
             </div>
             
             {isSearchOpen && filteredRepos.length > 0 && (
-              <div className="absolute z-10 w-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
+              <div className="absolute z-10 w-full mt-2 bg-gray-200 border border-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto">
                 {filteredRepos.map((repo) => (
                   <button
                     key={repo.id}
-                    className="w-full px-4 py-3 text-left hover:bg-gray-700 transition-colors flex items-center justify-between"
+                    className="w-full px-4 py-3 text-left hover:bg-cyan-700 transition-colors flex items-center justify-between"
                     onClick={() => {
                       setSelectedRepo(repo.full_name);
                       setIsSearchOpen(false);
@@ -240,7 +240,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
           </div>
 
           {selectedRepo && (
-            <div className="mt-4 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            <div className="mt-4 p-4 bg-gray-300 rounded-lg border border-gray-700">
               <div className="flex items-center">
                 <Github className="w-5 h-5 text-gray-300 mr-2" />
                 <span className="font-medium">{selectedRepo}</span>
@@ -285,15 +285,15 @@ export default function NewReadme({ session }: NewReadmeProps) {
       )}
 
       {isLoading && (
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-200 border-gray-700">
           <CardContent className="flex flex-col items-center justify-center py-10 text-center">
             <div className="flex items-center gap-3 mb-6">
               <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
               <span className="text-lg">Generating documentation...</span>
             </div>
             <blockquote className="max-w-2xl">
-              <p className="text-lg italic text-gray-300">"{currentQuote.quote}"</p>
-              <footer className="mt-2 text-sm text-gray-400">
+              <p className="text-lg italic text-gray-800">"{currentQuote.quote}"</p>
+              <footer className="mt-2 text-sm text-gray-800">
                 — {currentQuote.author}
               </footer>
             </blockquote>
@@ -305,7 +305,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
       )}
 
       {isFetching && !isLoading && !error && (
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gray-200 border-gray-700">
           <CardContent className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 animate-spin text-blue-400 mr-3" />
             <span>Loading your repositories...</span>

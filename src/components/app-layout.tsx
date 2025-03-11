@@ -93,7 +93,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
               <Link 
                 href="/" 
                 className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
+                  isActive('/') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
                 }`}
                 prefetch={true}
               >
@@ -104,7 +104,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
               <Link 
                 href="/new-readme" 
                 className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/new-readme') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
+                  isActive('/new-readme') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
                 }`}
                 prefetch={true}
               >
@@ -133,7 +133,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                       key={readme.id}
                       href={`/readme/${readme.id}`}
                       className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                        isActive(`/readme/${readme.id}`) ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
+                        isActive(`/readme/${readme.id}`) ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
                       }`}
                       onClick={() => setOpen(false)}
                       prefetch={true}
@@ -193,16 +193,13 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
             <MenuIcon className="w-5 h-5" />
           </button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0 bg-black bg-opacity-95 border-r border-gray-800">
+        <SheetContent side="left" className="w-64 p-0 bg-black bg-opacity-95 border-r border-gray-800 text-white">
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between px-4 py-4 border-b border-gray-800">
               <div className="flex items-center">
                 <Pen className="w-6 h-6 text-white" />
                 <h1 className="ml-2 text-xl font-bold">PenAI</h1>
               </div>
-              <button onClick={() => setOpen(false)}>
-                <X className="w-5 h-5" />
-              </button>
             </div>
             
             {/* Mobile Navigation with Fixed Structure */}
@@ -211,7 +208,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                 <Link 
                   href="/" 
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
+                    isActive('/') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
                   }`}
                   onClick={() => setOpen(false)}
                   prefetch={true}
@@ -223,7 +220,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                 <Link 
                   href="/new-readme" 
                   className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/new-readme') ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
+                    isActive('/new-readme') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
                   }`}
                   onClick={() => setOpen(false)}
                   prefetch={true}
@@ -252,7 +249,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                         key={readme.id}
                         href={`/readme/${readme.id}`}
                         className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                          isActive(`/readme/${readme.id}`) ? 'bg-pink-600 bg-opacity-50 text-pink-300' : 'hover:bg-gray-600'
+                          isActive(`/readme/${readme.id}`) ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
                         }`}
                         onClick={() => setOpen(false)}
                         prefetch={true}

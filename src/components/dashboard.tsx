@@ -84,14 +84,15 @@ export default function Dashboard({ session , history }: DashboardProps) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-gray-400 mt-1">Welcome to your README generator</p>
+          <p className="text-gray-400 mt-1 max-sm:hidden">Welcome to your README generator</p>
         </div>
        <Link href={"/new-readme"} prefetch={true}>
        <Button
-          className="bg-pink-600 hover:bg-pink-700"
+          className="bg-cyan-600 hover:bg-cyan-700"
         >
           <PlusCircle className="w-4 h-4 mr-2" />
-          Create New README
+          <span className="max-sm:hidden">Create New README</span>
+          <span className="md:hidden">New</span>
         </Button>
        </Link>
       </div>
@@ -106,7 +107,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
         {/* <Card className="bg-gray-100 border-gray-700 hover:bg-gray-200 transition-colors">
           <Link href="/new-readme" prefetch={true} className="block h-full">
             <CardHeader className="flex items-center justify-center h-40 border-b border-gray-700">
-              <PlusCircle className="w-16 h-16 text-pink-400 opacity-70" />
+              <PlusCircle className="w-16 h-16 text-cyan-400 opacity-70" />
             </CardHeader>
             <CardContent className="pt-6">
               <h3 className="text-xl font-bold text-center">Create New README</h3>
@@ -120,7 +121,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
         {isLoading ? (
           <Card className="bg-transparent border-gray-200 col-span-1">
             <CardContent className="flex items-center justify-center h-64">
-              <Loader2 className="w-8 h-8 animate-spin text-pink-400" />
+              <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
             </CardContent>
           </Card>
         ) : recentReadmes.length > 0 ? (
@@ -132,7 +133,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="truncate text-white">{readme.repo_name}</CardTitle>
-                  <div className="flex items-center text-xs text-gray-400">
+                  <div className="flex items-center text-xs text-gray-400 max-sm:hidden">
                     <Clock className="w-3 h-3 mr-1" />
                     {formatDate(readme.createdAt)}
                   </div>
@@ -142,7 +143,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
                     href={readme.repo_url} 
                     target="_blank"
                     rel="noopener noreferrer" 
-                    className="text-pink-500 hover:text-pink-400 flex items-center"
+                    className="text-cyan-500 hover:text-cyan-400 flex items-center"
                   >
                     View Repository
                     <ExternalLink className="w-3 h-3 ml-1" />
@@ -182,7 +183,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
                                     blockquote: ({node, ...props}) => 
                                       <blockquote className="border-l-4 border-gray-600 pl-4 my-4 italic" {...props} />,
                                     a: ({node, ...props}) => 
-                                      <a className="text-pink-400 hover:text-pink-300 transition-colors" {...props} />,
+                                      <a className="text-cyan-400 hover:text-cyan-300 transition-colors" {...props} />,
                                     table: ({node, ...props}) => 
                                       <div className="overflow-x-auto my-4">
                                         <table className="min-w-full border border-gray-700" {...props} />
@@ -230,7 +231,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
                   </Button>
                   <Button 
                     size="sm"
-                    className="bg-pink-600 hover:bg-pink-700"
+                    className="bg-cyan-600 hover:bg-cyan-700"
                     onClick={() => router.push(`/readme/${readme.id}`)}
                   >
                     <FileText className="w-3.5 h-3.5 mr-1.5" />

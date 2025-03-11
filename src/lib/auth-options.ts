@@ -50,7 +50,7 @@ const authOptions: NextAuthOptions = {
       // Initial sign in
       if (account && user) {
         // Find the user in Prisma to get the database ID
-        const dbUser = await prisma.user.findUnique({
+        const dbUser = await prisma.user.findFirst({
           where: { email: user.email as string }
         });
 

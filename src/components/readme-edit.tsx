@@ -224,23 +224,23 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
             <ArrowLeft className="w-4 h-4 mr-1" />
             <span>Back</span>
           </Button>
-          <h1 className="text-2xl font-bold">Editing: {readme.repo_name}</h1>
+          <h1 className="text-2xl font-bold max-sm:hidden">Editing: {readme.repo_name}</h1>
         </div>
         <div className="flex space-x-2">
           <Button
             variant="outline"
-            className="border-gray-700 hover:bg-gray-700"
+            className="border-gray-700 hover:bg-gray-700 text-black"
             onClick={handleCopy}
           >
             {isCopied ? (
               <>
                 <Check className="w-4 h-4 mr-2 text-green-400" />
-                Copied
+                <span className="max-sm:hidden">Copied</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
+                <Copy className="w-4 h-4 mr-2 " />
+                <span className="max-sm:hidden">Copy</span>
               </>
             )}
           </Button>
@@ -252,12 +252,12 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
             {isCommitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Committing...
+                <span className="max-sm:hidden">Committing ...</span>
               </>
             ) : (
               <>
                 <Github className="w-4 h-4 mr-2" />
-                Commit to Repo
+                <span className="max-sm:hidden">Commit to Repo</span>
               </>
             )}
           </Button>
@@ -269,12 +269,12 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
             {isSaving ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                Saving...
+                <span className="max-sm:hidden">Saving ...</span>
               </>
             ) : (
               <>
                 <Save className="w-4 h-4 mr-2" />
-                Save
+                <span className="max-sm:hidden">Save</span>
               </>
             )}
           </Button>
@@ -322,7 +322,7 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
         <CardHeader className="border-b border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>{readme.repo_name}</CardTitle>
+              <CardTitle className="text-gray-200 max-sm:hidden">{readme.repo_name}</CardTitle>
               <CardDescription className="flex items-center mt-1">
                 <a 
                   href={readme.repo_url}
@@ -338,17 +338,17 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
           </div>
         </CardHeader>
         <Tabs defaultValue="edit" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-gray-900 p-0 flex justify-start rounded-none border-b border-gray-700">
+          <TabsList className="w-full bg-gray-900 p-0 flex justify-start rounded-none border-b border-gray-700 text-white">
             <TabsTrigger 
               value="edit" 
-              className="py-3 px-6 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+              className="py-3 px-6 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-blue-600"
             >
               <Code className="w-4 h-4 mr-2" />
               Edit
             </TabsTrigger>
             <TabsTrigger 
               value="preview" 
-              className="py-3 px-6 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+              className="py-3 px-6 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-blue-600"
             >
               <Eye className="w-4 h-4 mr-2" />
               Preview
@@ -366,7 +366,7 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
             </div>
           </TabsContent>
           <TabsContent value="preview" className="mt-0 p-0">
-            <div className="p-6 prose prose-invert max-w-none min-h-[500px] bg-gray-900">
+            <div className="p-6 prose prose-invert max-w-none min-h-[500px] bg-gray-900 max-sm:break-words">
               <ReactMarkdown 
                 components={{
                   // Custom components for better markdown rendering
