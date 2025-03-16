@@ -1,33 +1,63 @@
-'use client'
+"use client"
 
-import React from 'react'
-import { LinkedInEmbed, XEmbed, YouTubeEmbed } from 'react-social-media-embed'
-import { Tweet } from 'react-tweet'
+import { Card } from "@/components/ui/card"
 
-function Testimonials() {
-    return (
-        <div className='max-sm:px-2'>
-            <h2 className='text-3xl font-bold text-white text-center max-sm:pt-10 '>Some Comments</h2>
-            <div className='flex flex-row max-sm:flex-col items-center justify-center gap-2'>
-                <div data-theme="dark">
-                    <Tweet id="1855841219751874755" />
-                </div>
-                <div data-theme="dark">
-                    <Tweet id="1855682039057699235" />
-                </div>
-                <div data-theme="dark">
-                    <Tweet id="1855699123904684039" />
-                </div>
-                <div data-theme="dark">
-                    <Tweet id="1855650990491590678" />
-                </div>
-                {/* <div data-theme="dark">
-                <Tweet id="1856002811609362634" />
-            </div> */}
-            </div>
-            {/* <YouTubeEmbed url='https://www.youtube.com/watch?v=xYlD4HEFW_c' /> */}
-        </div>
-    )
+type Testimonial = {
+  id: number
+  name: string
+  role: string
+  content: string
 }
 
-export default Testimonials
+const testimonials: Testimonial[] = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    role: "Frontend Developer",
+    content:
+      "PenAI has completely transformed how I create documentation. My GitHub repos now look professional with minimal effort.",
+  },
+  {
+    id: 2,
+    name: "Michael Chen",
+    role: "Open Source Contributor",
+    content:
+      "As someone who maintains multiple open source projects, PenAI has saved me countless hours on documentation.",
+  },
+  {
+    id: 3,
+    name: "Emily Rodriguez",
+    role: "Full Stack Developer",
+    content:
+      "The AI understands exactly what my projects need. The READMEs it generates are clear, comprehensive, and beautifully formatted.",
+  },
+]
+
+export default function Testimonials() {
+  return (
+    <section id="testimonials" className="py-24 px-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-light text-white mb-4">What people are saying</h2>
+          <div className="w-16 h-px bg-white/20 mx-auto"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {testimonials.map((testimonial) => (
+            <Card
+              key={testimonial.id}
+              className="bg-transparent border border-white/10 p-6 hover:border-white/20 transition-all duration-300"
+            >
+              <p className="text-white/70 text-sm mb-6">"{testimonial.content}"</p>
+              <div>
+                <p className="text-white text-sm font-medium">{testimonial.name}</p>
+                <p className="text-white/50 text-xs">{testimonial.role}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
