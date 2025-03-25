@@ -35,7 +35,7 @@ const pricingTiers: PricingTier[] = [
   // },
   {
     name: "Yearly",
-    price: "$15",
+    price: "$10",
     description: "For development teams",
     features: ["100 README generations", "Direct Commit to Github", "Priority support", "No monthly limits"],
     buttonText: "Upgrade to Pro",
