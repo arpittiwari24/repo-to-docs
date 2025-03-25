@@ -12,7 +12,7 @@ export default function Demo() {
         <div className="aspect-video w-full rounded-lg overflow-hidden border border-white/10 bg-black relative">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+            src="https://www.youtube.com/embed/GaEUB-5CGsc?si=IEHO0Jr0Dq-uiR-6"
             title="PenAI Demo"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

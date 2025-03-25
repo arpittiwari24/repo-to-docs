@@ -3,6 +3,7 @@
 import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import Link from "next/link"
 
 type PricingTier = {
   name: string
@@ -11,7 +12,8 @@ type PricingTier = {
   features: string[]
   buttonText: string
   popular?: boolean,
-  type?: string
+  type?: string,
+  link?: string
 }
 
 const pricingTiers: PricingTier[] = [
@@ -19,26 +21,27 @@ const pricingTiers: PricingTier[] = [
     name: "Free",
     price: "$0",
     description: "For personal projects",
-    features: ["1 README generations per month"],
+    features: ["1 README generation per month", "Direct Commit to Github"],
     buttonText: "Get Started",
     type: "/month",
   },
+  // {
+  //   name: "Pro",
+  //   price: "$5",
+  //   description: "For professional developers",
+  //   features: ["6 README generations per month", "Direct Commit to Github", "Priority support"],
+  //   buttonText: "Upgrade to Pro",
+  //   type: "/month",
+  // },
   {
-    name: "Pro",
-    price: "$5",
-    description: "For professional developers",
-    features: ["6 README generations per month", "Direct Commit to Github", "Priority support"],
-    buttonText: "Upgrade to Pro",
-    type: "/month",
-  },
-  {
-    name: "Lifetime",
-    price: "$20",
+    name: "Yearly",
+    price: "$15",
     description: "For development teams",
     features: ["100 README generations", "Direct Commit to Github", "Priority support", "No monthly limits"],
-    buttonText: "Upgrade to Lifetime",
-    type: "/one-time",
+    buttonText: "Upgrade to Pro",
+    type: "/yearly",
     popular: true,
+    link: "https://www.creem.io/payment/prod_hHSqQWhCkH7v8p73hbT1K"
   },
 ]
 
@@ -51,7 +54,7 @@ export default function Pricing() {
           <div className="w-16 h-px bg-white/20 mx-auto"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {pricingTiers.map((tier) => (
             <Card
               key={tier.name}
@@ -76,12 +79,14 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <Button
-                  variant={tier.popular ? "default" : "outline"}
-                  className={`w-full rounded-md ${tier.popular ? "bg-white text-black hover:bg-white/90" : "border-white/20 text-white hover:bg-white/5"}`}
-                >
-                  {tier.buttonText}
-                </Button>
+                <a href={tier.link} target="_blank">
+                  <Button
+                    variant={tier.popular ? "default" : "outline"}
+                    className={`w-full rounded-md ${tier.popular ? "bg-white text-black hover:bg-white/90" : "border-white/20 text-white hover:bg-white/5"}`}
+                  >
+                    {tier.buttonText}
+                  </Button>
+                </a>
               </div>
             </Card>
           ))}
