@@ -1,13 +1,12 @@
 import { cookies } from "next/headers";
+const environment = process.env.NODE_ENV
+const url = environment === "development" ? "http://localhost:9999" : "https://penai.arrpit.work/"
+
 
 export const fetchRecentReadmes = async () => {
   try {
     // Get all cookies to pass along with the request
     const cookieStore = cookies();
-
-    const environment = process.env.NODE_ENV
-
-    const url = environment === "development" ? "http://localhost:9999" : "https://penai.arrpit.work/"
     
     const response = await fetch(`${url}/api/generate-docs`, {
       headers: {
@@ -53,3 +52,22 @@ export const fetchReadme = async (readmeId : string) => {
       console.error('Error fetching README:', error);
     } 
   };
+
+
+export const fetchUserPremiumStatus = async (userId: string) => {
+  try {
+    const response = await fetch(`${url}/api/user/${userId}`);
+    
+    if (!response.ok) {
+      console.error('API response not OK:', response.status, response.statusText);
+      throw new Error(`Failed to fetch user premium status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log("Successfully fetched premium status:", data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching user premium status:', error);
+    return {}; // Return an empty object instead of undefined
+  }
+}

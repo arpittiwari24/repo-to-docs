@@ -235,12 +235,12 @@ export default function ReadmeEdit({ session, readmeId }: ReadmeEditProps) {
             {isCopied ? (
               <>
                 <Check className="w-4 h-4 mr-2 text-green-400" />
-                <span className="max-sm:hidden">Copied</span>
+                <span className="max-sm:hidden text-white">Copied</span>
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 mr-2 " />
-                <span className="max-sm:hidden">Copy</span>
+                <Copy className="w-4 h-4 mr-2 text-white" />
+                <span className="max-sm:hidden text-white">Copy</span>
               </>
             )}
           </Button>

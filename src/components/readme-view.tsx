@@ -146,6 +146,7 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
       }
       
       router.push('/');
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting README:', error);
       setError('Failed to delete README');
@@ -207,10 +208,10 @@ export default function ReadmeView({ session, readmeId }: ReadmeViewProps) {
           <Link href={`/readme/${readmeId}/edit`} prefetch={true}>
           <Button
             variant="outline"
-            className="border-gray-700 hover:bg-gray-300 text-black"
+            className="border-gray-700 hover:bg-gray-500 text-black"
           >
-            <Edit2 className="w-4 h-4 mr-2" />
-            <span className="max-sm:hidden">Edit</span>
+            <Edit2 className="w-4 h-4 mr-2 text-white" />
+            <span className="max-sm:hidden text-white">Edit</span>
           </Button>
           </Link>
           <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

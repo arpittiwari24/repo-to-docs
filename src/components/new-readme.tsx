@@ -191,7 +191,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
         <p className="text-gray-400 mt-1">Generate a comprehensive README for your GitHub repository</p>
       </div>
 
-      <Card className="bg-gray-200 border-gray-700">
+      <Card className="bg-gray-200 border-gray-700 text-black">
         <CardHeader>
           <CardTitle>Select Repository</CardTitle>
           <CardDescription>
@@ -252,7 +252,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
           <Button 
             variant="outline" 
             onClick={() => router.push('/')}
-            className="border-gray-700 hover:bg-gray-700"
+            className="border-gray-700 hover:bg-gray-700 text-white"
           >
             Cancel
           </Button>
