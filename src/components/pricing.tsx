@@ -4,6 +4,7 @@ import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
+import { signIn } from "next-auth/react"
 
 type PricingTier = {
   name: string
@@ -79,14 +80,13 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                <a href={tier.link} target="_blank">
                   <Button
+                  onClick={() => signIn()}
                     variant={tier.popular ? "default" : "outline"}
                     className={`w-full rounded-md ${tier.popular ? "bg-white text-black hover:bg-white/90" : "border-white/20 text-white hover:bg-white/5"}`}
                   >
-                    {tier.buttonText}
+                    Sign Up
                   </Button>
-                </a>
               </div>
             </Card>
           ))}

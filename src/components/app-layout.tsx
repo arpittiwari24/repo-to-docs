@@ -1,5 +1,6 @@
 'use client';
 
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
@@ -150,7 +151,23 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           <DialogFooter>
             <Button 
               className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700" 
-              onClick={() => window.location.href = "https://www.creem.io/payment/prod_hHSqQWhCkH7v8p73hbT1K"}
+              // onClick={() => window.location.href = "https://www.creem.io/payment/prod_hHSqQWhCkH7v8p73hbT1K"}
+              onClick={async () => {
+                const redirectUrl = await axios.post(
+                  `https://test-api.creem.io/v1/checkouts`,
+                    {
+                      "product_id": "prod_60nJEQOoklVNomVIXqW1VT",
+                      "metadata": {
+                        "userId": `${session.user.id}`
+                      }
+                    },
+                    {
+                      headers: { "x-api-key": "creem_test_suZbjDQxh82P75Q6a6QnM" },
+                    },
+                );
+
+                console.log(redirectUrl);
+              }}
             >
               Upgrade to Pro
             </Button>
