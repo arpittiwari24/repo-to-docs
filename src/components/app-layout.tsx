@@ -6,9 +6,9 @@ import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { 
-  Loader2, 
-  LogOut, 
+import {
+  Loader2,
+  LogOut,
   Pen,
   FileText,
   Home,
@@ -67,13 +67,13 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
   const [isLoadingReadmes, setIsLoadingReadmes] = useState(false);
   const [open, setOpen] = useState(false);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
-  
+
   // Initialize recentReadmes based on history prop type
   const [recentReadmes, setRecentReadmes] = useState<ReadmeHistory[]>(() => {
     // Check if history is an array
     if (Array.isArray(history)) {
       return history;
-    } 
+    }
     // Check if history is a single object and not null/undefined
     else if (history && typeof history === 'object') {
       return [history];
@@ -149,22 +149,17 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button 
-              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700" 
-              // onClick={() => window.location.href = "https://www.creem.io/payment/prod_hHSqQWhCkH7v8p73hbT1K"}
+            <Button
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
               onClick={async () => {
-                const redirectUrl = await axios.post(
-                  `https://test-api.creem.io/v1/checkouts`,
-                    {
-                      "product_id": "prod_60nJEQOoklVNomVIXqW1VT",
-                      "metadata": {
-                        "userId": `${session.user.id}`
-                      }
-                    },
-                    {
-                      headers: { "x-api-key": "creem_test_suZbjDQxh82P75Q6a6QnM" },
-                    },
-                );
+
+                const options = {
+                  method: 'POST',
+                  headers: { 'x-api-key': "creem_test_suZbjDQxh82P75Q6a6QnM", 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ product_id: 'prod_60nJEQOoklVNomVIXqW1VT', customer: { id: `${session.user.id}` } })
+                };
+
+                const redirectUrl = await fetch('https://test-api.creem.io/v1/checkout', options)
 
                 console.log(redirectUrl);
               }}
@@ -174,7 +169,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      
+
       {/* Desktop Sidebar - FIXED HEIGHT */}
       <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800 ">
         <div className="flex flex-col h-screen sticky top-0 bg-black text-white bg-opacity-50 backdrop-blur-sm">
@@ -183,39 +178,37 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
             <Pen className="w-8 h-8 text-white" />
             <h1 className="ml-2 text-2xl font-bold">PenAI</h1>
           </div>
-          
+
           {/* Navigation Section */}
           <div className="flex flex-col flex-grow overflow-hidden">
             <nav className="px-2 pt-4">
-              <Link 
-                href="/" 
-                className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                  isActive('/') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
-                }`}
+              <Link
+                href="/"
+                className={`flex items-center px-4 py-3 rounded-lg transition-colors ${isActive('/') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
+                  }`}
                 prefetch={true}
               >
                 <Home className="w-5 h-5 mr-3" />
                 <span>Dashboard</span>
               </Link>
-              
-                
-              {isPremium === false && recentReadmes.length === 1 ? (
-                  <>
-                  </>
-                ) : (
-                  <Link
-                    href="/new-readme"
-                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                      isActive('/new-readme') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
+
+
+              {isPremium === false && recentReadmes.length >= 1 ? (
+                <>
+                </>
+              ) : (
+                <Link
+                  href="/new-readme"
+                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${isActive('/new-readme') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
                     }`}
-                    onClick={() => setOpen(false)}
-                    prefetch={true}
-                  >
-                    <PlusCircle className="w-5 h-5 mr-3" />
-                    <span>New README</span>
-                  </Link>
-                )}
-              
+                  onClick={() => setOpen(false)}
+                  prefetch={true}
+                >
+                  <PlusCircle className="w-5 h-5 mr-3" />
+                  <span>New README</span>
+                </Link>
+              )}
+
               {!isPremium && (
                 <button
                   onClick={() => setIsPremiumModalOpen(true)}
@@ -226,14 +219,14 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                 </button>
               )}
             </nav>
-            
+
             {/* Recent READMEs Section */}
             <div className="px-4 pt-6 pb-2 mt-2 border-t border-gray-800">
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Recent READMEs <span className="text-xs text-gray-600">({session.user.premium === false ? `${recentReadmes.length}/1 used` : `${recentReadmes.length}/100 used`})</span>
               </h2>
             </div>
-            
+
             {/* Scrollable List */}
             <div className="flex-grow overflow-y-auto">
               <div className="px-2 space-y-1">
@@ -246,9 +239,8 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                     <Link
                       key={readme.id}
                       href={`/readme/${readme.id}`}
-                      className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                        isActive(`/readme/${readme.id}`) ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
-                      }`}
+                      className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${isActive(`/readme/${readme.id}`) ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-cyan-300 hover:bg-opacity-50'
+                        }`}
                       onClick={() => setOpen(false)}
                       prefetch={true}
                     >
@@ -256,9 +248,8 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                         <FileText className="w-4 h-4 min-w-4 mr-2" />
                         <span className="truncate">{readme.repo_name}</span>
                       </div>
-                      <ChevronRight className={`w-4 h-4 transition-transform ${
-                        isActive(`/readme/${readme.id}`) ? 'rotate-90' : ''
-                      }`} />
+                      <ChevronRight className={`w-4 h-4 transition-transform ${isActive(`/readme/${readme.id}`) ? 'rotate-90' : ''
+                        }`} />
                     </Link>
                   ))
                 ) : (
@@ -269,13 +260,13 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
               </div>
             </div>
           </div>
-          
+
           {/* User Profile Footer - FIXED AT BOTTOM */}
           <div className="flex items-center p-4 border-t border-gray-800 mt-auto">
-            <img 
-              src={session.user?.image ?? ""} 
-              className="w-8 h-8 rounded-full" 
-              alt={session.user?.name ?? ""} 
+            <img
+              src={session.user?.image ?? ""}
+              className="w-8 h-8 rounded-full"
+              alt={session.user?.name ?? ""}
             />
             <div className="ml-3 overflow-hidden">
               <div className="flex items-center">
@@ -291,8 +282,8 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button 
-                        onClick={() => setIsPremiumModalOpen(true)} 
+                      <button
+                        onClick={() => setIsPremiumModalOpen(true)}
                         className="p-1.5 rounded-md hover:bg-yellow-300 hover:bg-opacity-20 transition-colors mr-1"
                       >
                         <Crown className="w-4 h-4 text-yellow-400" />
@@ -307,8 +298,8 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button 
-                      onClick={() => signOut()} 
+                    <button
+                      onClick={() => signOut()}
                       className="p-1.5 rounded-md hover:bg-gray-300 hover:bg-opacity-20 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
@@ -323,7 +314,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Sidebar */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
@@ -339,31 +330,29 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                 <h1 className="ml-2 text-xl font-bold">PenAI</h1>
               </div>
             </div>
-            
+
             {/* Mobile Navigation with Fixed Structure */}
             <div className="flex flex-col h-[calc(100%-8rem)]">
               <nav className="px-2 pt-4">
-                <Link 
-                  href="/" 
-                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
-                  }`}
+                <Link
+                  href="/"
+                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${isActive('/') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
+                    }`}
                   onClick={() => setOpen(false)}
                   prefetch={true}
                 >
                   <Home className="w-5 h-5 mr-3" />
                   <span>Dashboard</span>
                 </Link>
-                
-                {isPremium === false && recentReadmes.length === 1 ? (
+
+                {isPremium === false && recentReadmes.length >= 1 ? (
                   <>
                   </>
                 ) : (
                   <Link
                     href="/new-readme"
-                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                      isActive('/new-readme') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
-                    }`}
+                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${isActive('/new-readme') ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
+                      }`}
                     onClick={() => setOpen(false)}
                     prefetch={true}
                   >
@@ -371,7 +360,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                     <span>New README</span>
                   </Link>
                 )}
-                
+
                 {!isPremium && (
                   <button
                     onClick={() => {
@@ -385,13 +374,13 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                   </button>
                 )}
               </nav>
-              
+
               <div className="px-4 pt-4 pb-2 mt-2 border-t border-gray-800">
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                   Recent READMEs  <span className="text-xs text-gray-600">({session.user.premium === false ? `${recentReadmes.length}/1 used` : `${recentReadmes.length}/100 used`})</span>
                 </h2>
               </div>
-              
+
               {/* Scrollable area */}
               <div className="flex-grow overflow-y-auto px-2">
                 <div className="space-y-1">
@@ -404,9 +393,8 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                       <Link
                         key={readme.id}
                         href={`/readme/${readme.id}`}
-                        className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${
-                          isActive(`/readme/${readme.id}`) ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
-                        }`}
+                        className={`flex items-center justify-between px-4 py-2.5 text-sm rounded-lg transition-colors ${isActive(`/readme/${readme.id}`) ? 'bg-cyan-600 bg-opacity-50 text-cyan-300' : 'hover:bg-gray-600'
+                          }`}
                         onClick={() => setOpen(false)}
                         prefetch={true}
                       >
@@ -425,13 +413,13 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
                 </div>
               </div>
             </div>
-            
+
             {/* Fixed footer */}
             <div className="flex items-center p-4 border-t border-gray-800 mt-auto">
-              <img 
-                src={session.user?.image ?? ""} 
-                className="w-8 h-8 rounded-full" 
-                alt={session.user?.name ?? ""} 
+              <img
+                src={session.user?.image ?? ""}
+                className="w-8 h-8 rounded-full"
+                alt={session.user?.name ?? ""}
               />
               <div className="ml-3 overflow-hidden">
                 <div className="flex items-center">
@@ -444,18 +432,18 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
               </div>
               <div className="ml-auto flex">
                 {!isPremium && (
-                  <button 
+                  <button
                     onClick={() => {
                       setIsPremiumModalOpen(true);
                       setOpen(false);
-                    }} 
+                    }}
                     className="p-1.5 rounded-md hover:bg-yellow-300 hover:bg-opacity-20 transition-colors mr-1"
                   >
                     <Crown className="w-4 h-4 text-yellow-400" />
                   </button>
                 )}
-                <button 
-                  onClick={() => signOut()} 
+                <button
+                  onClick={() => signOut()}
                   className="p-1.5 rounded-md hover:bg-gray-300 hover:bg-opacity-20 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
@@ -465,7 +453,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           </div>
         </SheetContent>
       </Sheet>
-      
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile Header */}
@@ -475,21 +463,21 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           </div>
           <div className="flex items-center">
             {!isPremium && (
-              <button 
-                onClick={() => setIsPremiumModalOpen(true)} 
+              <button
+                onClick={() => setIsPremiumModalOpen(true)}
                 className="p-1.5 rounded-md hover:bg-yellow-300 hover:bg-opacity-20 transition-colors mr-2"
               >
                 <Crown className="w-4 h-4 text-yellow-400" />
               </button>
             )}
-            <img 
-              src={session.user?.image ?? ""} 
-              className="w-8 h-8 rounded-full" 
-              alt={session.user?.name ?? ""} 
+            <img
+              src={session.user?.image ?? ""}
+              className="w-8 h-8 rounded-full"
+              alt={session.user?.name ?? ""}
             />
           </div>
         </header>
-        
+
         {/* Page Content */}
         <main className="flex-1 overflow-auto p-4 md:p-6">
           {children}
