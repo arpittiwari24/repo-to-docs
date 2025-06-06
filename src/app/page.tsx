@@ -12,16 +12,34 @@ import Demo from "@/components/demo";
 import Hero from "@/components/hero";
 import Pricing from "@/components/pricing";
 import Footer from "@/components/footer";
+import { prisma } from "@/lib/prisma"; // Assuming you have prisma instance exported
+
+// Add this function to fetch user statistics
+async function fetchUserStats() {
+  try {
+    const [userCount, readmeCount] = await Promise.all([
+      prisma.user.count(),
+      prisma.readme.count() // Assuming you have a readme model
+    ]);
+    
+    return { userCount, readmeCount };
+  } catch (error) {
+    console.error("Error fetching user stats:", error);
+    return { userCount: 0, readmeCount: 0 };
+  }
+}
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
   
-  // If no session exists, show login page
+  // If no session exists, show login page with stats
   if (!session) {
+    const userStats = await fetchUserStats();
+    
     return (
       <div className="bg-gradient-to-tr from-black to-gray-900 min-h-screen">
         <Navbar />
-        <Hero />
+        <Hero userStats={userStats} />
         <Demo />
         <Testimonials />
         <Pricing />
