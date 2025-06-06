@@ -4,12 +4,12 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto relative">
         {/* Large product name as background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h2 className="text-[12vw] md:text-[20vh] font-bold text-white/20 select-none tracking-tighter">PenAI</h2>
+          <h2 className="text-[2vw] md:text-[10vh] font-bold text-white/20 select-none tracking-tighter">README GENERATOR</h2>
         </div>
 
         {/* Minimal footer content */}
-        <div className="relative flex flex-col md:flex-row justify-between items-center gap-4 z-10">
-          <p className="text-xs text-white/40">© {new Date().getFullYear()} PenAI. All rights reserved.</p>
+        {/* <div className="relative flex flex-col md:flex-row justify-between items-center gap-4 z-10">
+          <p className="text-xs text-white/40">© {new Date().getFullYear()} Readme Generator. All rights reserved.</p>
           <div className="flex items-center text-xs text-white/40">
             Made with ❤️ by{" "}
             <a
@@ -21,7 +21,7 @@ export default function Footer() {
               Arrpit
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   )

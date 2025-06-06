@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     // }
 
     // Logic according to event
-    if (eventType === "order_created" || eventType === "order_updated") {
+    if (eventType === "order_created") {
       console.log("Order created or updated event received");
       const user_id = body.meta.custom_data.user_id;
       await prisma.user.update({

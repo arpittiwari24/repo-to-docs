@@ -25,14 +25,14 @@ const fallbackTestimonials: Testimonial[] = [
     name: "Sarah Johnson",
     role: "Frontend Developer",
     content:
-      "PenAI has completely transformed how I create documentation. My GitHub repos now look professional with minimal effort.",
+      "Readme Generator has completely transformed how I create documentation. My GitHub repos now look professional with minimal effort.",
   },
   {
     id: 2,
     name: "Michael Chen",
     role: "Open Source Contributor",
     content:
-      "As someone who maintains multiple open source projects, PenAI has saved me countless hours on documentation.",
+      "As someone who maintains multiple open source projects, Readme Generator has saved me countless hours on documentation.",
   },
   {
     id: 3,

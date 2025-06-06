@@ -87,7 +87,7 @@ export default function Hero({ userStats }: HeroProps) {
           <div className="mt-16 w-full max-w-4xl relative">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-white/5 to-white/10 rounded-lg blur opacity-50"></div>
             <div className="relative bg-black border border-white/10 rounded-lg overflow-hidden">
-              <img src="/dashboard.png" alt="PenAI Interface" className="w-full h-auto" />
+              <img src="/dashboard.png" alt="Readme Generator Interface" className="w-full h-auto" />
             </div>
           </div>
         </div>

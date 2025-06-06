@@ -21,8 +21,8 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 py-6 px-8 bg-black/80 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Pen className="w-6 h-6 text-white" />
-          <h1 className="text-xl font-medium text-white">PenAI</h1>
+            <img src="/logos.webp" alt="" className="size-12 rounded-full"/>
+          <h1 className="text-xl font-medium text-white">Readme Generator</h1>
         </div>
 
         {/* Desktop Navigation */}

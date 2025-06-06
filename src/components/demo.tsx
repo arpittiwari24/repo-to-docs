@@ -15,7 +15,7 @@ export default function Demo() {
           <iframe
             className="w-full h-full"
             src="https://www.youtube.com/embed/2QXUQ8OLceQ?si=xbH8sKGt9svJ-SNL"
-            title="PenAI Demo"
+            title="Readme Generator Demo"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>

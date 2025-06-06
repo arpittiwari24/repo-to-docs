@@ -85,7 +85,7 @@ export default function Pricing() {
 
                 {tier.type === "one-time" ? (
                     <Button
-                    onClick={() => signIn()}
+                    onClick={() => signIn("github")}
                       variant={tier.popular ? "default" : "outline"}
                       className={`w-full rounded-md ${tier.popular ? "bg-white text-black hover:bg-white/90" : "border-white/20 text-white hover:bg-white/5"}`}
                     >
@@ -93,7 +93,7 @@ export default function Pricing() {
                     </Button>
                 ) : (
                   <Button
-                    onClick={() => signIn()}
+                    onClick={() => signIn("github")}
                     variant={tier.popular ? "default" : "outline"}
                     className={`w-full rounded-md ${tier.popular ? "bg-white text-black hover:bg-white/90" : "border-white/20 text-white hover:bg-white/5"}`}
                   >

@@ -8,14 +8,14 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI GitHub Readme Generator | Generate beautifull and professional Readme for your Repo ",
-  description: "PenAI is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
-  keywords : "PenAI, AI, GitHub, Readme, Generator, AI GitHub Readme Generator, GitHub Readme Generator, Readme Generator, AI Readme Generator , PenAI Readme Generator", 
+  description: "Readme Generator is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
+  keywords : "Readme Generator, AI, GitHub, Readme, Generator, AI GitHub Readme Generator, GitHub Readme Generator, Readme Generator, AI Readme Generator , PenAI Readme Generator", 
   twitter: {
     card: "summary_large_image",
     site: "@arrpitttwts",
     creator: "@arrpitttwts",
-    title: "PenAI | AI GitHub Readme Generator",
-    description: "PenAI is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
+    title: "AI GitHub Readme Generator",
+    description: "Readme Generator is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
     images: "https://penai.arrpit.work/og.png",
   },
   openGraph: {
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://penai.arrpit.work",
     siteName: "PenAI | AI GitHub Readme Generator",
-    title: "PenAI | AI GitHub Readme Generator",
-    description: "PenAI is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
+    title: "AI GitHub Readme Generator",
+    description: "Readme Generator is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
     images: [
       {
         url: "https://penai.arrpit.work/og.png",
         width: 1200,
         height: 630,
-        alt: "PenAI | AI GitHub Readme Generators",
+        alt: "AI GitHub Readme Generators",
       },
     ],
   },

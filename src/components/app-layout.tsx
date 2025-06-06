@@ -69,7 +69,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center text-xl">
             <Crown className="w-5 h-5 mr-2 text-yellow-400" />
-            Upgrade to PenAI Pro
+            Upgrade to Readme Generator Pro
           </DialogTitle>
           <DialogDescription className="text-gray-400">
             Unlock premium features to supercharge your README creation
@@ -99,7 +99,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
         </div>
         <DialogFooter>
           <a
-            href={`https://readme-gen.lemonsqueezy.com/buy/299c3ec0-6f3b-4a5b-afff-cba97f5e9ab6?checkout[custom][user_id]=${session.user.id}`}
+            href={`https://readme-gen.lemonsqueezy.com/buy/1cdbff2d-b771-40db-b207-18f36747c01c?checkout[custom][user_id]=${session.user.id}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -277,9 +277,9 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
       {/* Desktop Sidebar */}
       <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800">
         <div className="flex flex-col h-screen sticky top-0 bg-black text-white bg-opacity-50 backdrop-blur-sm">
-          <div className="flex items-center justify-center py-4 border-b border-gray-800">
-            <Pen className="w-8 h-8 text-white" />
-            <h1 className="ml-2 text-2xl font-bold">PenAI</h1>
+          <div className="flex items-center justify-center py-1 border-b border-gray-800">
+            <img src="/logos.webp" alt="" className="size-14"/>
+            {/* <h1 className="ml-2 text-2xl font-bold">Readme Generator</h1> */}
           </div>
 
           <div className="flex flex-col flex-grow overflow-hidden">
@@ -305,8 +305,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between px-4 py-4 border-b border-gray-800">
               <div className="flex items-center">
-                <Pen className="w-6 h-6 text-white" />
-                <h1 className="ml-2 text-xl font-bold">PenAI</h1>
+                <img src="/logos.webp" alt="" className="size-14 rounded-full" />
               </div>
             </div>
 
