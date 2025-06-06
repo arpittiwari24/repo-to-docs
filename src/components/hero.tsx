@@ -51,9 +51,23 @@ export default function Hero({ userStats }: HeroProps) {
             Generate beautiful, professional README files for your GitHub repositories in seconds using AI.
           </p>
 
-          {/* User Statistics */}
-          {userStats && (
-            <div className="flex flex-col sm:flex-row gap-8 mb-10 p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
+
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md lg:items-center lg:justify-center">
+            <Button onClick={() => signIn("github")} className="bg-white text-black hover:bg-white/90 rounded-md h-12 px-6 text-sm font-medium">
+              Get Started
+            </Button>
+            <a href="#demo">
+              <Button
+                variant="outline"
+                className="border-white/20 hover:bg-white/5 text-white rounded-md h-12 px-6 text-sm font-medium"
+              >
+                Watch Demo
+              </Button>
+            </a>
+          </div>
+
+                    {userStats && (
+            <div className="flex flex-col sm:flex-row gap-8 mt-10 p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
               <div className="flex flex-col items-center">
                 <div className="text-2xl font-bold text-white">
                   <AnimatedCounter end={userStats.userCount + 45} />+
@@ -69,20 +83,6 @@ export default function Hero({ userStats }: HeroProps) {
               </div>
             </div>
           )}
-
-          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md lg:items-center lg:justify-center">
-            <Button onClick={() => signIn("github")} className="bg-white text-black hover:bg-white/90 rounded-md h-12 px-6 text-sm font-medium">
-              Get Started
-            </Button>
-            <a href="#demo">
-              <Button
-                variant="outline"
-                className="border-white/20 hover:bg-white/5 text-white rounded-md h-12 px-6 text-sm font-medium"
-              >
-                Watch Demo
-              </Button>
-            </a>
-          </div>
 
           <div className="mt-16 w-full max-w-4xl relative">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-white/5 to-white/10 rounded-lg blur opacity-50"></div>

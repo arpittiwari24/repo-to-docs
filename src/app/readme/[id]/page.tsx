@@ -1,9 +1,10 @@
+// app/readme/[id]/page.tsx
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import AppLayout from "@/components/app-layout";
 import ReadmeView from "@/components/readme-view";
 import authOptions from "@/lib/auth-options";
-import { fetchRecentReadmes } from "@/lib/common";
+import { fetchRecentReadmes, fetchUserPremiumStatus } from "@/lib/common";
 
 export default async function ReadmeViewPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -12,14 +13,26 @@ export default async function ReadmeViewPage({ params }: { params: { id: string 
     redirect("/");
   }
 
+  // Fetch both readme data and premium status
+  const [readmeData, userPremiumStatus] = await Promise.all([
+    fetchRecentReadmes(),
+    fetchUserPremiumStatus(session.user.id!)
+  ]);
 
-  const data = session ? await fetchRecentReadmes() : [];
+  // Merge premium status into session
+  const enhancedSession = {
+    ...session,
+    user: {
+      ...session.user,
+      premium: userPremiumStatus?.premium || false
+    }
+  };
 
-  const historyArray = Array.isArray(data) ? data : [];
+  const historyArray = Array.isArray(readmeData) ? readmeData : [];
 
   return (
-     <AppLayout session={session} history={historyArray}>
-      <ReadmeView session={session} readmeId={params.id} />
+    <AppLayout session={enhancedSession} history={historyArray}>
+      <ReadmeView session={enhancedSession} readmeId={params.id} />
     </AppLayout>
   );
 }

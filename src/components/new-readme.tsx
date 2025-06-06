@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { 
@@ -88,7 +88,47 @@ export default function NewReadme({ session }: NewReadmeProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentQuote, setCurrentQuote] = useState(loadingQuotes[0]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [loadingDots, setLoadingDots] = useState('');
+  
+  const searchRef = useRef<HTMLDivElement>(null);
 
+  // Handle clicking outside of search dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Loading dots animation
+  useEffect(() => {
+    let dotsInterval: NodeJS.Timeout;
+    
+    if (isLoading) {
+      dotsInterval = setInterval(() => {
+        setLoadingDots(prev => {
+          if (prev === '...') return '';
+          return prev + '.';
+        });
+      }, 500);
+    } else {
+      setLoadingDots('');
+    }
+
+    return () => {
+      if (dotsInterval) {
+        clearInterval(dotsInterval);
+      }
+    };
+  }, [isLoading]);
+
+  // Quote rotation
   useEffect(() => {
     let quoteInterval: NodeJS.Timeout;
     
@@ -199,14 +239,13 @@ export default function NewReadme({ session }: NewReadmeProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="relative">
+          <div className="relative" ref={searchRef}>
             <div className="relative">
               <Input
                 type="text"
                 placeholder="Search repositories..."
                 className="bg-gray-900 border-gray-700 focus-visible:ring-blue-600 text-gray-100"
                 value={searchTerm}
-                // @ts-ignore
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onFocus={() => setIsSearchOpen(true)}
               />
@@ -222,6 +261,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
                     onClick={() => {
                       setSelectedRepo(repo.full_name);
                       setIsSearchOpen(false);
+                      setSearchTerm(repo.full_name);
                     }}
                   >
                     <div className="flex items-center">
@@ -264,7 +304,7 @@ export default function NewReadme({ session }: NewReadmeProps) {
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                <span>Generating...</span>
+                <span>Generating{loadingDots}</span>
               </>
             ) : (
               <>
@@ -287,28 +327,40 @@ export default function NewReadme({ session }: NewReadmeProps) {
       {isLoading && (
         <Card className="bg-gray-200 border-gray-700">
           <CardContent className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="flex items-center gap-3 mb-6">
-              <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
-              <span className="text-lg">Generating documentation...</span>
+            <div className="flex flex-col items-center gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+                  <div className="absolute inset-0 w-8 h-8 border-2 border-blue-200 rounded-full animate-pulse"></div>
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-xl font-semibold text-gray-800">
+                    Generating README{loadingDots}
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    Analyzing your repository
+                  </span>
+                </div>
+              </div>
+              
+              {/* Progress indicator */}
+              <div className="w-full max-w-md">
+                <div className="h-2 bg-gray-300 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full animate-pulse"></div>
+                </div>
+              </div>
             </div>
+            
             <blockquote className="max-w-2xl">
               <p className="text-lg italic text-gray-800">"{currentQuote.quote}"</p>
-              <footer className="mt-2 text-sm text-gray-800">
+              <footer className="mt-2 text-sm text-gray-600">
                 — {currentQuote.author}
               </footer>
             </blockquote>
-            <p className="mt-6 text-sm text-gray-400">
+            
+            <p className="mt-6 text-sm text-gray-500">
               This may take a minute as we analyze your repository files and generate a comprehensive README.
             </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {isFetching && !isLoading && !error && (
-        <Card className="bg-gray-200 border-gray-700">
-          <CardContent className="flex items-center justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-400 mr-3" />
-            <span>Loading your repositories...</span>
           </CardContent>
         </Card>
       )}

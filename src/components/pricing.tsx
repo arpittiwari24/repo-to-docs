@@ -3,7 +3,6 @@
 import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import Link from "next/link"
 import { signIn } from "next-auth/react"
 
 type PricingTier = {
@@ -14,7 +13,6 @@ type PricingTier = {
   buttonText: string
   popular?: boolean,
   type?: string,
-  link?: string
 }
 
 const pricingTiers: PricingTier[] = [
@@ -28,13 +26,12 @@ const pricingTiers: PricingTier[] = [
   },
   {
     name: "Lifetime",
-    price: "$10",
+    price: "$15",
     description: "One-time payment, yours forever",
     features: ["Unlimited README generations", "Direct Commit to Github", "Multiple Language Translation", "Priority support", "All future features included", "No monthly limits", "Lifetime updates"],
     buttonText: "Get Started",
     type: "one-time",
     popular: true,
-    link: "https://www.creem.io/payment/prod_hHSqQWhCkH7v8p73hbT1K"
   },
 ]
 
@@ -86,15 +83,14 @@ export default function Pricing() {
                   ))}
                 </ul>
 
-                {tier.link ? (
-                  <Link href={tier.link} target="_blank">
+                {tier.type === "one-time" ? (
                     <Button
+                    onClick={() => signIn()}
                       variant={tier.popular ? "default" : "outline"}
                       className={`w-full rounded-md ${tier.popular ? "bg-white text-black hover:bg-white/90" : "border-white/20 text-white hover:bg-white/5"}`}
                     >
                       {tier.buttonText}
                     </Button>
-                  </Link>
                 ) : (
                   <Button
                     onClick={() => signIn()}

@@ -108,7 +108,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* <Card className="bg-gray-100 border-gray-700 hover:bg-gray-200 transition-colors">
           <Link href="/new-readme" prefetch={true} className="block h-full">
             <CardHeader className="flex items-center justify-center h-40 border-b border-gray-700">
@@ -139,8 +139,11 @@ export default function Dashboard({ session , history }: DashboardProps) {
                 <div className="flex items-center justify-between">
                   <CardTitle className="truncate text-white">{readme.repo_name}</CardTitle>
                   <div className="flex items-center text-xs text-gray-400 max-sm:hidden">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {formatDate(readme.createdAt)}
+                    {new Intl.DateTimeFormat('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    }).format(new Date(readme.createdAt))}
                   </div>
                 </div>
                 <CardDescription className="flex items-center mt-1">
