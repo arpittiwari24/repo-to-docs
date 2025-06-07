@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 const environment = process.env.NODE_ENV
-const url = environment === "development" ? "http://localhost:9999" : "https://penai.arrpit.work/"
+const url = environment === "development" ? "http://localhost:9999" : "https://readme-generator.xyz/"
 
 
 export const fetchRecentReadmes = async () => {

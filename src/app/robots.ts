@@ -7,6 +7,6 @@ export default function robots() : MetadataRoute.Robots {
             allow : ["/"],
             disallow : []
         },
-        sitemap : "https://penai.arrpit.work/sitemap.xml"
+        sitemap : "https://readme-generator.xyz/sitemap.xml"
     }
 }
