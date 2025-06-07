@@ -70,7 +70,7 @@ export default function Hero({ userStats }: HeroProps) {
             <div className="flex flex-col sm:flex-row gap-8 mt-10 p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
               <div className="flex flex-col items-center">
                 <div className="text-2xl font-bold text-white">
-                  <AnimatedCounter end={userStats.userCount + 45} />+
+                  <AnimatedCounter end={userStats.userCount + 41} />+
                 </div>
                 <div className="text-sm text-white/60">Happy Users</div>
               </div>
