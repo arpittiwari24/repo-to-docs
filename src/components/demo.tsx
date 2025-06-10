@@ -14,7 +14,7 @@ export default function Demo() {
         <div className="aspect-video w-full rounded-lg overflow-hidden border border-white/10 bg-black relative">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/2QXUQ8OLceQ?si=xbH8sKGt9svJ-SNL"
+            src="https://www.youtube.com/embed/KxI4qOxsnOE?si=F1MgTeAOttPOGCst"
             title="Readme Generator Demo"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
