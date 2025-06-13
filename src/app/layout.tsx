@@ -45,6 +45,37 @@ export default function RootLayout({
     <html lang="en">
       <head>
       <script defer src="https://cloud.umami.is/script.js" data-website-id="19d2ee6f-c216-4382-be58-bdeeb27f797b"></script>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AI GitHub Readme Generator",
+  "url": "https://readme-generator.xyz",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All",
+  "description": "Readme Generator is an AI-powered tool that helps you generate beautiful and professional README.md files for your GitHub projects.",
+  "keywords": [
+    "AI Readme Generator",
+    "GitHub Readme Generator",
+    "Readme Generator",
+    "Git Readme Generator",
+    "Free Readme Generator"
+  ],
+  "creator": {
+    "@type": "Person",
+    "name": "Arrpit Tiwari"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "25"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}) }} />
+
       </head>
       <Providers>
       <body className={inter.className}>
