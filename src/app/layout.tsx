@@ -7,15 +7,15 @@ import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI GitHub Readme Generator | Generate beautifull and professional Readme for your Repo ",
-  description: "Readme Generator is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
-  keywords : "Readme Generator, AI, GitHub, Readme, Generator, AI GitHub Readme Generator, GitHub Readme Generator, Readme Generator, AI Readme Generator , PenAI Readme Generator", 
+  title: "Free AI GitHub README Generator - Make Your Repo Stand Out",
+  description: "Create stunning and professional README.md files for your GitHub repos using AI. Fast, easy, and beautiful. Try it in seconds!",
+  keywords : "Readme Generator, AI, GitHub, Readme, Generator, AI GitHub Readme Generator, GitHub Readme Generator, readme file generator, AI Readme Generator , PenAI Readme Generator , git readme generator , readme ai", 
   twitter: {
     card: "summary_large_image",
     site: "@arrpitttwts",
     creator: "@arrpitttwts",
     title: "AI GitHub Readme Generator",
-    description: "Readme Generator is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
+    description: "Create stunning and professional README.md files for your GitHub repos using AI. Fast, easy, and beautiful. Try it in seconds!",
     images: "https://readme-generator.xyz/og.png",
   },
   openGraph: {
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://readme-generator.xyz",
     siteName: "AI GitHub Readme Generator",
-    title: "AI GitHub Readme Generator",
-    description: "Readme Generator is an AI GitHub Readme Generator that helps you create a beautiful README.md file for your GitHub repository.",
+    title: "Free AI GitHub README Generator - Make Your Repo Stand Out",
+    description: "Create stunning and professional README.md files for your GitHub repos using AI. Fast, easy, and beautiful. Try it in seconds!",
     images: [
       {
         url: "https://readme-generator.xyz/og.png",
