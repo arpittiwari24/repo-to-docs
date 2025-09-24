@@ -28,7 +28,7 @@ const pricingTiers: PricingTier[] = [
     name: "Lifetime",
     price: "$15",
     description: "One-time payment, yours forever",
-    features: ["Unlimited README generations", "Direct Commit to Github", "Multiple Language Translation", "Priority support", "All future features included", "No monthly limits", "Lifetime updates"],
+    features: ["Unlimited README generations", "Direct Commit to Github", "Priority support", "All future features included", "No monthly limits", "Lifetime updates"],
     buttonText: "Get Started",
     type: "one-time",
     popular: true,
