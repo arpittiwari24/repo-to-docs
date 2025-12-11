@@ -20,8 +20,6 @@ model User {
     sessions      Session[]
     Authenticator Authenticator[] // Optional for WebAuthn support
 
-    premium Boolean @default(false)
-
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 

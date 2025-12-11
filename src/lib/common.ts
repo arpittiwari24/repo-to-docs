@@ -52,22 +52,3 @@ export const fetchReadme = async (readmeId : string) => {
       console.error('Error fetching README:', error);
     } 
   };
-
-
-export const fetchUserPremiumStatus = async (userId: string) => {
-  try {
-    const response = await fetch(`${url}/api/user/${userId}`);
-    
-    if (!response.ok) {
-      console.error('API response not OK:', response.status, response.statusText);
-      throw new Error(`Failed to fetch user premium status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    console.log("Successfully fetched premium status:", data);
-    return data;
-  } catch (error) {
-    console.error('Error fetching user premium status:', error);
-    return {}; // Return an empty object instead of undefined
-  }
-}

@@ -36,7 +36,7 @@ interface ReadmeHistory {
 }
 
 interface DashboardProps {
-  session: Session & { user?: { premium?: boolean } };
+  session: Session;
   history: ReadmeHistory[] | ReadmeHistory;
 }
 
@@ -86,7 +86,7 @@ export default function Dashboard({ session , history }: DashboardProps) {
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
           <p className="text-gray-400 mt-1 max-sm:hidden">Welcome to your README generator</p>
         </div>
-        {session.user.premium === false && recentReadmes.length >= 1 ? (
+        {recentReadmes.length >= 1 ? (
           <>
           </>
         ) : (

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import AppLayout from "@/components/app-layout";
 import ReadmeEdit from "@/components/readme-edit";
 import authOptions from "@/lib/auth-options";
-import { fetchRecentReadmes, fetchUserPremiumStatus } from "@/lib/common";
+import { fetchRecentReadmes } from "@/lib/common";
 
 export default async function ReadmeEditPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -13,26 +13,15 @@ export default async function ReadmeEditPage({ params }: { params: { id: string 
     redirect("/");
   }
 
-  // Fetch both readme data and premium status
-  const [readmeData, userPremiumStatus] = await Promise.all([
+  const [readmeData] = await Promise.all([
     fetchRecentReadmes(),
-    fetchUserPremiumStatus(session.user.id!)
   ]);
-
-  // Merge premium status into session
-  const enhancedSession = {
-    ...session,
-    user: {
-      ...session.user,
-      premium: userPremiumStatus?.premium || false
-    }
-  };
 
   const historyArray = Array.isArray(readmeData) ? readmeData : [];
 
   return (
-    <AppLayout session={enhancedSession} history={historyArray}>
-      <ReadmeEdit session={enhancedSession} readmeId={params.id} />
+    <AppLayout session={session} history={historyArray}>
+      <ReadmeEdit session={session} readmeId={params.id} />
     </AppLayout>
   );
 }

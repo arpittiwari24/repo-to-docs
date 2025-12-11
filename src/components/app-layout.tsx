@@ -46,7 +46,7 @@ interface ReadmeHistory {
 }
 
 interface LayoutProps {
-  session: Session & { user?: { premium?: boolean, id?: string } };
+  session: Session & { user?: { id?: string } };
   children: React.ReactNode;
   history: ReadmeHistory[];
 }
@@ -55,62 +55,12 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
   // Normalize history to always be an array
   const recentReadmes = Array.isArray(history) ? history : [];
-  const isPremium = session?.user?.premium || false;
 
   const isActive = (path: string) => pathname === path;
 
-  const PremiumModal = () => (
-    <Dialog open={isPremiumModalOpen} onOpenChange={setIsPremiumModalOpen}>
-      <DialogContent className="bg-gray-900 border border-gray-800 text-white">
-        <DialogHeader>
-          <DialogTitle className="flex items-center text-xl">
-            <Crown className="w-5 h-5 mr-2 text-yellow-400" />
-            Upgrade to Readme Generator Pro
-          </DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Unlock premium features to supercharge your README creation
-          </DialogDescription>
-        </DialogHeader>
-        <div className="py-4">
-          <div className="bg-gray-800 p-4 rounded-lg mb-4">
-            <h3 className="font-bold text-lg mb-2">Pro Plan - $15 (one time)</h3>
-            <ul className="space-y-2">
-              {[
-                "Unlimited README generations",
-                "Direct Commit to Github",
-                "Priority support",
-                "No limits"
-              ].map((feature, index) => (
-                <li key={index} className="flex items-center">
-                  <div className="bg-cyan-900 p-1 rounded-full mr-2">
-                    <svg className="w-3 h-3 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <DialogFooter>
-          <a
-            href={`https://readme-gen.lemonsqueezy.com/buy/1cdbff2d-b771-40db-b207-18f36747c01c?checkout[custom][user_id]=${session.user.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700">
-              Upgrade to Pro
-            </Button>
-          </a>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
 
   const NavigationItems = ({ mobile = false }) => (
     <nav className="px-2 pt-4">
@@ -128,8 +78,7 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
         <span>Dashboard</span>
       </Link>
 
-      {/* Show "New README" only if user is premium OR has no readmes yet */}
-      {(isPremium || recentReadmes.length === 0) && (
+      {(recentReadmes.length === 0) && (
         <Link
           href="/new-readme"
           className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
@@ -145,32 +94,12 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
         </Link>
       )}
 
-      {!isPremium && (
-        <button
-          onClick={() => {
-            setIsPremiumModalOpen(true);
-            mobile && setOpen(false);
-          }}
-          className="flex items-center w-full px-4 py-3 mt-2 rounded-lg text-sm bg-gradient-to-r from-yellow-500 to-amber-600 bg-opacity-20 hover:bg-opacity-30 transition-colors"
-        >
-          <Crown className="w-5 h-5 mr-3 text-white" />
-          <span>Upgrade to Pro</span>
-        </button>
-      )}
     </nav>
   );
 
   const RecentReadmesList = ({ mobile = false }) => (
     <>
       <div className="px-4 pt-6 pb-2 mt-2 border-t border-gray-800">
-        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-          Recent READMEs{" "}
-          {!isPremium && (
-            <span className="text-xs text-gray-600">
-              {recentReadmes.length}/1 used
-            </span>
-          )}
-        </h2>
       </div>
       <div className="flex-grow overflow-y-auto px-2">
         <div className="space-y-1">
@@ -220,37 +149,12 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
           <p className="text-sm font-medium truncate">
             {session.user?.name}
           </p>
-          {isPremium && (
-            <Badge className="ml-2 bg-gradient-to-r from-yellow-400 to-amber-600 text-xs">
-              PRO
-            </Badge>
-          )}
         </div>
         <p className="text-xs text-gray-400 truncate">
           {session.user?.email}
         </p>
       </div>
       <div className="ml-auto flex items-center">
-        {!isPremium && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={() => {
-                    setIsPremiumModalOpen(true);
-                    mobile && setOpen(false);
-                  }}
-                  className="p-1.5 rounded-md hover:bg-yellow-300 hover:bg-opacity-20 transition-colors mr-1"
-                >
-                  <Crown className="w-4 h-4 text-yellow-400" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                <p>Upgrade to Pro</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -272,7 +176,6 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
 
   return (
     <div className="flex min-h-screen text-white">
-      <PremiumModal />
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block md:w-64 md:flex-shrink-0 border-r border-gray-800">
@@ -324,17 +227,9 @@ export default function AppLayout({ session, children, history }: LayoutProps) {
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-end h-16 px-4 border-b border-gray-800">
           <div className="flex-1 ml-12 text-center">
-            <h1 className="text-xl font-bold">PenAI</h1>
+            <h1 className="text-xl font-bold"></h1>
           </div>
           <div className="flex items-center">
-            {!isPremium && (
-              <button
-                onClick={() => setIsPremiumModalOpen(true)}
-                className="p-1.5 rounded-md hover:bg-yellow-300 hover:bg-opacity-20 transition-colors mr-2"
-              >
-                <Crown className="w-4 h-4 text-yellow-400" />
-              </button>
-            )}
             <img
               src={session.user?.image ?? ""}
               className="w-8 h-8 rounded-full"
